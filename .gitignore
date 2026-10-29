@@ -1,0 +1,13 @@
+﻿# Dossiers de sauvegardes locales
+_backups/
+.backups/
+*.zip
+
+# Fichiers OS & Editeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Documents personnels (CV, export LinkedIn)
+*.pdf

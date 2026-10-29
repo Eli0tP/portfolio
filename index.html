@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Portfolio d'Eliot Péchadre, développeur PHP/Symfony en alternance chez WESCO et étudiant en Bachelor IA à l'ECE Paris.">
+  <title>Eliot Péchadre | Développeur PHP/Symfony &amp; Étudiant ECE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <aside class="social-dock" aria-label="Réseaux sociaux et contact">
+    <div class="dock-container">
+      <div class="dock-bubble" id="dock-bubble"></div>
+
+      <a href="https://www.linkedin.com/in/eliot-pechadre-28a961356/" target="_blank" rel="noopener noreferrer" class="dock-link" title="LinkedIn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.64a1.64 1.64 0 1 0 0 3.28 1.64 1.64 0 0 0 0-3.28Z" />
+        </svg>
+        <span class="dock-tooltip">LinkedIn</span>
+      </a>
+
+      <a href="https://github.com/Eli0tP" target="_blank" rel="noopener noreferrer" class="dock-link" title="GitHub">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z" />
+        </svg>
+        <span class="dock-tooltip">GitHub</span>
+      </a>
+
+      <a href="mailto:eliot.pechadre@gmail.com" class="dock-link" title="Email">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+          <path
+            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2Zm0 4-8 5-8-5V6l8 5 8-5v2Z" />
+        </svg>
+        <span class="dock-tooltip">eliot.pechadre@gmail.com</span>
+      </a>
+    </div>
+  </aside>
+
+  <header class="site-nav-wrapper">
+    <nav class="site-nav container" aria-label="Navigation principale">
+      <a href="#hero" class="nav-logo" aria-label="Retour en haut de page">
+        <span class="logo-accent">E</span>P.
+      </a>
+      <div class="nav-menu">
+        <a href="#timeline-section" class="nav-item">Parcours</a>
+        <a href="#projets" class="nav-item">Projets</a>
+        <button type="button" class="nav-item nav-cv-btn" id="open-cv-btn" aria-haspopup="dialog"
+          aria-controls="cv-modal">CV</button>
+        <a href="#contact" class="nav-item nav-btn">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="hero-sticky-container">
+      <section id="hero" class="hero-section">
+        <div class="container hero-container">
+
+          <div class="status-badge">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>En alternance chez WESCO depuis septembre 2026</span>
+          </div>
+
+          <div class="hero-card">
+            <p class="hero-greeting">Bonjour, je suis</p>
+            <h1 class="hero-name">Eliot Péchadre</h1>
+            <p class="hero-subtitle">
+              <span class="highlight-tag">&lt; Développeur /&gt;</span>
+              Développeur PHP/Symfony en alternance chez <strong>WESCO</strong> • Bachelor IA à l'ECE Paris
+            </p>
+          </div>
+
+          <a href="#timeline-section" class="scroll-cue" aria-label="Faire défiler vers le parcours">
+            <span class="scroll-cue-text">Faire défiler pour explorer</span>
+            <span class="mouse-icon" aria-hidden="true">
+              <span class="mouse-wheel"></span>
+            </span>
+          </a>
+
+        </div>
+      </section>
+    </div>
+
+    <div class="main-content-flow" id="main-content-flow">
+
+      <section id="timeline-section" class="timeline-section" aria-labelledby="timeline-title">
+        <div class="container">
+
+          <div class="section-header">
+            <span class="section-tag">Parcours &amp; Formations</span>
+            <h2 class="section-title" id="timeline-title">Expériences &amp; Études</h2>
+          </div>
+
+          <div class="exp-table">
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">2026 – Présent</span>
+                <h3 class="exp-role">Développeur alternant</h3>
+                <span class="exp-company">WESCO • Cerizay</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Formation :</strong> Bachelor IA — ECE Paris (2026 – 2027), rythme 2
+                    semaines école / 3 semaines entreprise</p>
+                  <p class="exp-desc">
+                    Alternant au service informatique de <strong>WESCO</strong>. Développement <strong>PHP/Symfony</strong> (correction de bugs et évolutions sur une
+                    application interne), mise en place de GitLab/GitHub pour le service avec rédaction de la
+                    documentation technique, déploiement et configuration de postes macOS et installation du matériel
+                    logistique (imprimantes et scanners Zebra).
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">PHP / Symfony</li>
+                    <li class="tag">GitLab / GitHub</li>
+                    <li class="tag">Documentation technique</li>
+                    <li class="tag">macOS</li>
+                    <li class="tag">Matériel Zebra</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">Fév. – Juil. 2026</span>
+                <h3 class="exp-role">Semestre d'échange international</h3>
+                <span class="exp-company">Université de Malte</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Campus :</strong> L-Imsida, Malte — cursus 100 % anglophone</p>
+                  <p class="exp-desc">
+                    Semestre d'immersion académique dans le cadre du Bachelor ECE. Travail en équipes multiculturelles,
+                    autonomie complète à l'étranger et consolidation d'un anglais professionnel de niveau B2.
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">Anglais B2</li>
+                    <li class="tag">International</li>
+                    <li class="tag">Travail en équipe</li>
+                    <li class="tag">Autonomie</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">Juin – Août 2025</span>
+                <h3 class="exp-role">Préparateur de commandes (CDD 3 mois)</h3>
+                <span class="exp-company">WESCO • Cerizay</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Contexte :</strong> entrepôt logistique du groupe WESCO, en période de
+                    forte activité</p>
+                  <p class="exp-desc">
+                    Préparation, vérification et expédition des commandes clients, mise sur palettes et filmage.
+                    Respect des cadences et des délais d'expédition, contrôle de conformité des produits et zéro erreur
+                    de colisage.
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">Logistique</li>
+                    <li class="tag">Rigueur</li>
+                    <li class="tag">Esprit d'équipe</li>
+                    <li class="tag">Organisation</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">Oct. 2024 – Avr. 2025</span>
+                <h3 class="exp-role">Bénévolat — aide aux devoirs</h3>
+                <span class="exp-company">Association PACT</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Engagement :</strong> accompagnement scolaire en parallèle du Bachelor
+                  </p>
+                  <p class="exp-desc">
+                    Explication des consignes et aide à la compréhension des cours. Planification du travail avec les
+                    élèves pour atteindre leurs objectifs scolaires.
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">Pédagogie</li>
+                    <li class="tag">Transmission</li>
+                    <li class="tag">Organisation</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">2024 – 2026</span>
+                <h3 class="exp-role">Bachelor Informatique (1<sup>re</sup> et 2<sup>e</sup> années)</h3>
+                <span class="exp-company">ECE • Rennes</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Diplôme :</strong> Bachelor ECE (2024 – 2027), campus de Rennes, puis
+                    Malte et Paris en Bachelor IA</p>
+                  <p class="exp-desc">
+                    Bases solides en ingénierie logicielle : algorithmique, programmation orientée objet (Python, Java),
+                    bases de données SQL et NoSQL, réseaux et gestion de projet en cycles agiles.
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">Python &amp; Java</li>
+                    <li class="tag">SQL / NoSQL</li>
+                    <li class="tag">Algorithmique</li>
+                    <li class="tag">Réseaux</li>
+                    <li class="tag">Git</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+            <article class="exp-row" tabindex="0" aria-expanded="false">
+              <div class="exp-main">
+                <span class="exp-date">2021 – 2024</span>
+                <h3 class="exp-role">Baccalauréat général (Maths &amp; NSI)</h3>
+                <span class="exp-company">Lycée Saint-André • Niort</span>
+                <span class="exp-toggle-icon" aria-hidden="true">+</span>
+              </div>
+              <div class="exp-drawer">
+                <div class="exp-drawer-inner">
+                  <p class="exp-subline"><strong>Spécialités :</strong> Mathématiques et Numérique &amp; Sciences
+                    Informatiques (NSI)</p>
+                  <p class="exp-desc">
+                    Premiers pas en développement et en algorithmique. Stages de découverte en milieu industriel chez
+                    <strong>Safran Electrical &amp; Power</strong> (Niort, 2019) et à la <strong>Société Câblage
+                      Électronique</strong> (Villiers-en-Plaine, 2021) : production de sous-ensembles électroniques et
+                    respect strict des consignes de sécurité.
+                  </p>
+                  <ul class="tag-list">
+                    <li class="tag">NSI &amp; Maths</li>
+                    <li class="tag">Stages industriels</li>
+                    <li class="tag">Sécurité</li>
+                  </ul>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section id="projets" class="projects-section" aria-labelledby="projects-title">
+        <div class="container">
+
+          <div class="section-header">
+            <span class="section-tag">&lt;/&gt; Réalisations informatiques</span>
+            <h2 class="section-title" id="projects-title">Mes projets clés</h2>
+            <p class="section-description">
+              Retrouvez le code source complet et d'autres projets sur mon profil
+              <a href="https://github.com/Eli0tP" target="_blank" rel="noopener noreferrer" class="text-link">GitHub :
+                Eli0tP</a>.
+            </p>
+          </div>
+
+          <div class="projects-grid">
+
+            <article class="project-card">
+              <div class="project-header">
+                <span class="project-category">Jeu &amp; POO</span>
+                <span class="project-lang">Java • Swing</span>
+              </div>
+              <h3 class="card-title">Pac-Man</h3>
+              <p class="project-desc">
+                Jeu complet en programmation orientée objet : labyrinthe chargé depuis un fichier texte, quatre fantômes
+                au comportement différent (poursuite par distance euclidienne ou déplacement aléatoire), super
+                pac-gommes, téléporteurs, score et effets sonores.
+              </p>
+              <ul class="project-techs">
+                <li>Java</li>
+                <li>Swing</li>
+                <li>POO</li>
+                <li>Collisions</li>
+              </ul>
+              <a href="https://github.com/Eli0tP/Pac-Man" target="_blank" rel="noopener noreferrer"
+                class="text-link project-link">Voir le code sur GitHub →</a>
+            </article>
+
+            <article class="project-card">
+              <div class="project-header">
+                <span class="project-category">Web &amp; Base de données</span>
+                <span class="project-lang">Python • Flask</span>
+              </div>
+              <h3 class="card-title">Plateforme de mentorat</h3>
+              <p class="project-desc">
+                Site de tutorat entre lycéens : inscription et connexion, trois rôles (élève, mentor, administrateur),
+                dépôt de demandes d'aide et base de données SQLite.
+              </p>
+              <ul class="project-techs">
+                <li>Flask</li>
+                <li>SQLite</li>
+                <li>Jinja</li>
+                <li>Sessions</li>
+              </ul>
+              <a href="https://github.com/Eli0tP/Projet-Tutorat" target="_blank" rel="noopener noreferrer"
+                class="text-link project-link">Voir le code sur GitHub →</a>
+            </article>
+
+            <article class="project-card">
+              <div class="project-header">
+                <span class="project-category">Structures de données</span>
+                <span class="project-lang">Python</span>
+              </div>
+              <h3 class="card-title">Solitaire en console</h3>
+              <p class="project-desc">
+                Jeu du Solitaire en 32 ou 52 cartes, construit sur des piles (LIFO) pour les défausses et les familles
+                et une file (FIFO) pour la pioche.
+              </p>
+              <ul class="project-techs">
+                <li>Piles / Files</li>
+                <li>POO</li>
+                <li>Algorithmique</li>
+              </ul>
+              <a href="https://github.com/Eli0tP/Solitaire" target="_blank" rel="noopener noreferrer"
+                class="text-link project-link">Voir le code sur GitHub →</a>
+            </article>
+
+            <article class="project-card">
+              <div class="project-header">
+                <span class="project-category">Data &amp; Interface graphique</span>
+                <span class="project-lang">Python • Tkinter</span>
+              </div>
+              <h3 class="card-title">Visualisateur de parcours GPS</h3>
+              <p class="project-desc">
+                Mini-projet de NSI (2023) : lecture de relevés GPS au format CSV, tracé du parcours sur une carte
+                interactive, calcul des distances avec la formule de Haversine et courbes d'altitude et de fréquence
+                cardiaque. Un curseur permet de suivre le coureur point par point (vitesse, distance, calories).
+              </p>
+              <ul class="project-techs">
+                <li>Python</li>
+                <li>Tkinter</li>
+                <li>tkintermapview</li>
+                <li>CSV</li>
+                <li>Haversine</li>
+              </ul>
+              <a href="https://github.com/Eli0tP/GPS-CSV" target="_blank" rel="noopener noreferrer"
+                class="text-link project-link">Voir le code sur GitHub →</a>
+            </article>
+
+          </div>
+
+        </div>
+      </section>
+
+      <section id="contact" class="contact-section" aria-labelledby="contact-title">
+        <div class="container">
+          <div class="contact-box">
+            <div class="contact-text">
+              <span class="contact-badge">Échangeons</span>
+              <h2 class="contact-title" id="contact-title">Développeur en alternance</h2>
+              <p class="contact-desc">
+                Actuellement chez <strong>WESCO</strong> et à l'<strong>ECE Paris</strong>. Je suis toujours ouvert aux
+                échanges sur le développement web, l'ingénierie logicielle et les systèmes d'information.
+              </p>
+
+              <address class="contact-details">
+                <a href="mailto:eliot.pechadre@gmail.com" class="contact-detail-item">
+                  <span class="icon" aria-hidden="true">✉️</span>
+                  <span>eliot.pechadre@gmail.com</span>
+                </a>
+                <span class="contact-detail-item">
+                  <span class="icon" aria-hidden="true">📍</span>
+                  <span>Niort (79000), Cerizay (WESCO) &amp; Paris (ECE)</span>
+                </span>
+              </address>
+            </div>
+
+            <div class="contact-cta">
+              <a href="mailto:eliot.pechadre@gmail.com?subject=Contact%20-%20Eliot%20P%C3%A9chadre"
+                class="btn btn-primary btn-large">
+                <span>M'envoyer un message</span>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <p>© 2026 Eliot Péchadre — Conçu avec passion (HTML, CSS &amp; Vanilla JS).</p>
+      <div class="footer-links">
+        <a href="https://github.com/Eli0tP" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://www.linkedin.com/in/eliot-pechadre-28a961356/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:eliot.pechadre@gmail.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="cv-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="cv-modal-title"
+    aria-hidden="true">
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="cv-modal-title">Curriculum Vitae — Eliot Péchadre</h2>
+        <button type="button" class="modal-close" id="modal-close-btn" aria-label="Fermer la fenêtre">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="cv-summary-card">
+          <h3>Résumé du profil</h3>
+          <p><strong>Poste actuel :</strong> Développeur PHP/Symfony en alternance chez WESCO (Cerizay)</p>
+          <p><strong>Formation :</strong> Bachelor ECE (2024 – 2027) — Rennes, Malte puis Bachelor IA à Paris</p>
+          <p><strong>Certification :</strong> Examen Programming — Niveau 1</p>
+          <p><strong>Rythme :</strong> 2 semaines à l'école / 3 semaines en entreprise</p>
+          <p><strong>GitHub :</strong> <a href="https://github.com/Eli0tP" target="_blank"
+              rel="noopener noreferrer">github.com/Eli0tP</a></p>
+        </div>
+        <div class="modal-actions">
+          <a href="mailto:eliot.pechadre@gmail.com?subject=Demande%20de%20CV%20PDF" class="btn btn-primary">
+            Demander mon CV complet en PDF
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
