@@ -26,6 +26,32 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  const projectsGrid = document.getElementById("projects-grid");
+  const projectsToggle = document.getElementById("projects-toggle");
+  const extraProjects = document.querySelectorAll(".project-card--extra");
+
+  function setProjectsExpanded(isExpanded) {
+    projectsGrid.classList.toggle("is-collapsed", !isExpanded);
+    projectsToggle.setAttribute("aria-expanded", String(isExpanded));
+    projectsToggle.textContent = isExpanded
+      ? "Afficher moins de projets"
+      : `Voir les ${extraProjects.length} autres projets`;
+  }
+
+  if (projectsGrid && projectsToggle && extraProjects.length > 0) {
+    projectsToggle.hidden = false;
+    setProjectsExpanded(false);
+
+    projectsToggle.addEventListener("click", () => {
+      const isExpanded = projectsToggle.getAttribute("aria-expanded") === "true";
+      setProjectsExpanded(!isExpanded);
+
+      if (isExpanded) {
+        document.getElementById("projets").scrollIntoView({ behavior: "smooth" });
+      }
+    });
+  }
+
   const dockBubble = document.getElementById("dock-bubble");
   const dockLinks = document.querySelectorAll(".dock-link");
   const dockContainer = document.querySelector(".dock-container");
