@@ -281,6 +281,29 @@
             </p>
           </div>
 
+          <div class="project-views" id="project-views" hidden>
+            <div class="project-views-track" role="group" aria-label="Mode d'affichage des projets">
+              <button type="button" class="project-view-btn" data-view="liste" aria-pressed="true">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M3 5h4v4H3V5Zm6 1h12v2H9V6ZM3 10h4v4H3v-4Zm6 1h12v2H9v-2Zm-6 4h4v4H3v-4Zm6 1h12v2H9v-2Z" />
+                </svg>
+                Liste
+              </button>
+              <button type="button" class="project-view-btn" data-view="grille" aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M3 3h8v8H3V3Zm10 0h8v8h-8V3ZM3 13h8v8H3v-8Zm10 0h8v8h-8v-8Z" />
+                </svg>
+                Grille
+              </button>
+              <button type="button" class="project-view-btn" data-view="carrousel" aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5h8v14H8V5ZM2 7h4v10H2V7Zm16 0h4v10h-4V7Z" />
+                </svg>
+                Carrousel 3D
+              </button>
+            </div>
+          </div>
+
           <div class="projects-explorer" id="projects-explorer">
             <div class="project-tabs" id="project-tabs" role="tablist" aria-label="Mes projets"
               aria-orientation="vertical" hidden></div>
@@ -432,6 +455,22 @@
               </article>
 
             </div>
+          </div>
+
+          <div class="carousel-controls" id="carousel-controls" hidden>
+            <button type="button" class="carousel-btn" id="carousel-prev" aria-label="Projet précédent"
+              aria-controls="projects-grid">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+              </svg>
+            </button>
+            <span class="carousel-counter" id="carousel-counter" aria-live="polite"></span>
+            <button type="button" class="carousel-btn" id="carousel-next" aria-label="Projet suivant"
+              aria-controls="projects-grid">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+                <path d="M8.59 16.59 10 18l6-6-6-6-1.41 1.41L13.17 12z" />
+              </svg>
+            </button>
           </div>
 
         </div>

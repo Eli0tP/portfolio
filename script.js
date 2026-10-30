@@ -26,21 +26,84 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Projets : liste des titres à gauche, projet sélectionné à droite (sans JS, toutes les cartes restent en grille)
+  // Projets : trois modes de vue (liste + détail, grille compacte, carrousel 3D) qui partagent le projet sélectionné.
+  // Sans JS, toutes les cartes restent en grille.
   const projectsExplorer = document.getElementById("projects-explorer");
   const projectTabList = document.getElementById("project-tabs");
+  const projectsGrid = document.getElementById("projects-grid");
   const projectCards = document.querySelectorAll("#projects-grid .project-card");
+  const projectViewSwitcher = document.getElementById("project-views");
+  const projectViewButtons = document.querySelectorAll(".project-view-btn");
+  const carouselControls = document.getElementById("carousel-controls");
+  const carouselCounter = document.getElementById("carousel-counter");
+  const projectViews = ["liste", "grille", "carrousel"];
+  const projectViewStorageKey = "portfolio-projects-view";
   const projectTabs = [];
+  let activeProjectIndex = 0;
+  let projectView = "liste";
 
-  function selectProject(index, moveFocus) {
+  function getCarouselOffset(index) {
+    const total = projectCards.length;
+    let offset = index - activeProjectIndex;
+    if (offset > total / 2) offset -= total;
+    if (offset < -total / 2) offset += total;
+    return offset;
+  }
+
+  function updateProjects() {
     projectTabs.forEach((tab, tabIndex) => {
-      const isActive = tabIndex === index;
+      const isActive = tabIndex === activeProjectIndex;
       tab.setAttribute("aria-selected", String(isActive));
       tab.tabIndex = isActive ? 0 : -1;
-      projectCards[tabIndex].classList.toggle("is-active", isActive);
-      projectCards[tabIndex].setAttribute("aria-hidden", String(!isActive));
     });
-    if (moveFocus) projectTabs[index].focus();
+
+    projectCards.forEach((card, index) => {
+      const isActive = index === activeProjectIndex;
+      const isHidden = projectView !== "grille" && !isActive;
+      const offset = getCarouselOffset(index);
+
+      card.classList.toggle("is-active", isActive);
+      card.setAttribute("aria-hidden", String(isHidden));
+      card.style.setProperty("--carousel-offset", String(offset));
+      card.style.setProperty("--carousel-distance", String(Math.abs(offset)));
+      card.querySelectorAll("a").forEach((link) => {
+        if (isHidden) link.tabIndex = -1;
+        else link.removeAttribute("tabindex");
+      });
+
+      if (projectView === "liste") card.setAttribute("role", "tabpanel");
+      else card.removeAttribute("role");
+    });
+
+    if (carouselCounter) {
+      const pad = (value) => String(value).padStart(2, "0");
+      carouselCounter.textContent = `${pad(activeProjectIndex + 1)} / ${pad(projectCards.length)}`;
+    }
+  }
+
+  function selectProject(index, moveFocus) {
+    activeProjectIndex = (index + projectCards.length) % projectCards.length;
+    updateProjects();
+    if (moveFocus) projectTabs[activeProjectIndex].focus();
+  }
+
+  function setProjectView(view) {
+    projectView = projectViews.includes(view) ? view : "liste";
+    projectsExplorer.dataset.view = projectView;
+    projectTabList.hidden = projectView !== "liste";
+    if (carouselControls) carouselControls.hidden = projectView !== "carrousel";
+
+    projectViewButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.view === projectView));
+    });
+
+    try {
+      localStorage.setItem(projectViewStorageKey, projectView);
+    } catch (error) {
+      // Stockage indisponible (navigation privée) : le choix ne sera simplement pas retenu
+    }
+
+    updateProjects();
   }
 
   if (projectsExplorer && projectTabList && projectCards.length > 0) {
@@ -50,8 +113,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const cardId = `project-panel-${index + 1}`;
 
       card.id = cardId;
-      card.setAttribute("role", "tabpanel");
       card.setAttribute("aria-labelledby", `project-tab-${index + 1}`);
+
+      // Carrousel : cliquer sur une carte de côté la ramène au centre
+      card.addEventListener("click", (event) => {
+        if (projectView !== "carrousel" || index === activeProjectIndex) return;
+        event.preventDefault();
+        selectProject(index, false);
+      });
 
       const tab = document.createElement("button");
       tab.type = "button";
@@ -96,9 +165,60 @@ document.addEventListener("DOMContentLoaded", () => {
       projectTabs.push(tab);
     });
 
-    projectTabList.hidden = false;
-    projectsExplorer.classList.add("is-enhanced");
-    selectProject(0, false);
+    projectViewButtons.forEach((button) => {
+      button.addEventListener("click", () => setProjectView(button.dataset.view));
+    });
+
+    document.getElementById("carousel-prev")?.addEventListener("click", () => selectProject(activeProjectIndex - 1, false));
+    document.getElementById("carousel-next")?.addEventListener("click", () => selectProject(activeProjectIndex + 1, false));
+
+    [projectsExplorer, carouselControls].forEach((element) => {
+      element?.addEventListener("keydown", (event) => {
+        if (projectView !== "carrousel") return;
+        if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+        event.preventDefault();
+        selectProject(activeProjectIndex + (event.key === "ArrowRight" ? 1 : -1), false);
+      });
+    });
+
+    // Carrousel : glisser du doigt (ou de la souris) vers la gauche ou la droite
+    let swipeStartX = null;
+    let ignoreNextClick = false;
+    projectsGrid.addEventListener("pointerdown", (event) => {
+      if (projectView === "carrousel") swipeStartX = event.clientX;
+    });
+    projectsGrid.addEventListener("pointerup", (event) => {
+      if (swipeStartX === null) return;
+      const distance = event.clientX - swipeStartX;
+      swipeStartX = null;
+      if (Math.abs(distance) > 50) {
+        ignoreNextClick = true;
+        setTimeout(() => {
+          ignoreNextClick = false;
+        }, 0);
+        selectProject(activeProjectIndex + (distance < 0 ? 1 : -1), false);
+      }
+    });
+    projectsGrid.addEventListener("pointercancel", () => {
+      swipeStartX = null;
+    });
+    // Un glissement ne doit pas aussi compter comme un clic (sur une carte ou un lien GitHub)
+    projectsGrid.addEventListener("click", (event) => {
+      if (!ignoreNextClick) return;
+      ignoreNextClick = false;
+      event.preventDefault();
+      event.stopPropagation();
+    }, true);
+
+    let savedView = "liste";
+    try {
+      savedView = localStorage.getItem(projectViewStorageKey) || "liste";
+    } catch (error) {
+      // Stockage indisponible : on garde la vue liste
+    }
+
+    if (projectViewSwitcher) projectViewSwitcher.hidden = false;
+    setProjectView(savedView);
   }
 
   const dockBubble = document.getElementById("dock-bubble");
