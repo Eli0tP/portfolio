@@ -753,11 +753,6 @@ button {
   box-shadow: var(--shadow-hover);
 }
 
-.project-card.is-tilting {
-  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-6px);
-  transition: transform 0.12s ease-out, border-color 0.35s ease, box-shadow 0.35s ease;
-}
-
 .project-card::after {
   content: '';
   position: absolute;
@@ -770,7 +765,7 @@ button {
   pointer-events: none;
 }
 
-.project-card.is-tilting::after {
+.project-card.is-glowing::after {
   opacity: 1;
 }
 
@@ -947,10 +942,6 @@ button {
   transform: translateY(-6px);
 }
 
-.projects-explorer.is-enhanced .project-card.is-active.is-tilting {
-  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-6px);
-}
-
 .projects-explorer.is-enhanced .project-card .card-title {
   font-size: 1.6rem;
 }
@@ -962,6 +953,7 @@ button {
 /* Lien GitHub des projets : même pastille et même bulle orange que le dock des réseaux sociaux */
 .project-github {
   position: relative;
+  z-index: 1;
   isolation: isolate;
   align-self: flex-start;
   display: inline-flex;

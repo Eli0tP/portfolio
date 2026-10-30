@@ -353,23 +353,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Inclinaison 3D des cartes projets au survol
-  if (finePointer && !reducedMotion) {
+  // Reflet orange qui suit la souris sur les cartes projets : la carte reste immobile pour viser facilement le logo GitHub
+  if (finePointer) {
     document.querySelectorAll(".project-card").forEach((card) => {
       card.addEventListener("pointermove", (event) => {
         const rect = card.getBoundingClientRect();
         const ratioX = (event.clientX - rect.left) / rect.width;
         const ratioY = (event.clientY - rect.top) / rect.height;
 
-        card.classList.add("is-tilting");
-        card.style.setProperty("--tilt-y", `${((ratioX - 0.5) * 10).toFixed(2)}deg`);
-        card.style.setProperty("--tilt-x", `${((0.5 - ratioY) * 10).toFixed(2)}deg`);
+        card.classList.add("is-glowing");
         card.style.setProperty("--glare-x", `${(ratioX * 100).toFixed(1)}%`);
         card.style.setProperty("--glare-y", `${(ratioY * 100).toFixed(1)}%`);
       });
 
       card.addEventListener("pointerleave", () => {
-        card.classList.remove("is-tilting");
+        card.classList.remove("is-glowing");
       });
     });
   }
