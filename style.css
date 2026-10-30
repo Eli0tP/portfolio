@@ -950,11 +950,11 @@ button {
   font-size: 0.98rem;
 }
 
-/* Lien GitHub des projets : même pastille et même bulle orange que le dock des réseaux sociaux */
+/* Lien GitHub des projets : logo dessiné au trait (sans remplissage), redessiné au survol.
+   Animation volontairement ralentie : durées de base divisées par 0,8. */
 .project-github {
   position: relative;
   z-index: 1;
-  isolation: isolate;
   align-self: flex-start;
   display: inline-flex;
   align-items: center;
@@ -963,42 +963,56 @@ button {
   height: 44px;
   margin-top: 18px;
   border-radius: 50%;
-  background-color: var(--color-ink);
-  color: rgba(255, 255, 255, 0.5);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22), 0 2px 6px rgba(0, 0, 0, 0.14);
-  transition: color 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  background-color: transparent;
+  border: 1.5px solid var(--color-border-hover);
+  color: var(--color-primary);
+  transition: color 0.31s ease, border-color 0.31s ease, background-color 0.31s ease,
+    transform 0.375s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.project-github::before {
-  content: '';
-  position: absolute;
-  inset: 3px;
-  z-index: -1;
-  border-radius: 50%;
-  background-color: var(--color-primary);
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.55),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.18);
-  opacity: 0;
-  transform: scale(0.3);
-  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
-    opacity 0.25s ease;
+.project-github svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.project-github path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
 }
 
 .project-github:hover,
 .project-github:focus-visible {
-  color: var(--color-white);
+  color: var(--color-primary-hover);
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-subtle);
   transform: translateY(-2px) scale(1.08);
 }
 
-.project-github:hover::before,
-.project-github:focus-visible::before {
-  opacity: 1;
-  transform: scale(1);
+.project-github:hover path,
+.project-github:focus-visible path {
+  animation: github-stroke-draw 1.125s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes github-stroke-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .project-github:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 3px;
+}
+
+.project-github .dock-tooltip {
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .project-github:hover .dock-tooltip,
@@ -1367,6 +1381,11 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .project-github:hover path,
+  .project-github:focus-visible path {
+    animation: none;
+  }
+
   html {
     scroll-behavior: auto;
   }
