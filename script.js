@@ -26,30 +26,79 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const projectsGrid = document.getElementById("projects-grid");
-  const projectsToggle = document.getElementById("projects-toggle");
-  const extraProjects = document.querySelectorAll(".project-card--extra");
+  // Projets : liste des titres à gauche, projet sélectionné à droite (sans JS, toutes les cartes restent en grille)
+  const projectsExplorer = document.getElementById("projects-explorer");
+  const projectTabList = document.getElementById("project-tabs");
+  const projectCards = document.querySelectorAll("#projects-grid .project-card");
+  const projectTabs = [];
 
-  function setProjectsExpanded(isExpanded) {
-    projectsGrid.classList.toggle("is-collapsed", !isExpanded);
-    projectsToggle.setAttribute("aria-expanded", String(isExpanded));
-    projectsToggle.textContent = isExpanded
-      ? "Afficher moins de projets"
-      : `Voir les ${extraProjects.length} autres projets`;
+  function selectProject(index, moveFocus) {
+    projectTabs.forEach((tab, tabIndex) => {
+      const isActive = tabIndex === index;
+      tab.setAttribute("aria-selected", String(isActive));
+      tab.tabIndex = isActive ? 0 : -1;
+      projectCards[tabIndex].classList.toggle("is-active", isActive);
+      projectCards[tabIndex].setAttribute("aria-hidden", String(!isActive));
+    });
+    if (moveFocus) projectTabs[index].focus();
   }
 
-  if (projectsGrid && projectsToggle && extraProjects.length > 0) {
-    projectsToggle.hidden = false;
-    setProjectsExpanded(false);
+  if (projectsExplorer && projectTabList && projectCards.length > 0) {
+    projectCards.forEach((card, index) => {
+      const title = card.querySelector(".card-title");
+      const language = card.querySelector(".project-lang");
+      const cardId = `project-panel-${index + 1}`;
 
-    projectsToggle.addEventListener("click", () => {
-      const isExpanded = projectsToggle.getAttribute("aria-expanded") === "true";
-      setProjectsExpanded(!isExpanded);
+      card.id = cardId;
+      card.setAttribute("role", "tabpanel");
+      card.setAttribute("aria-labelledby", `project-tab-${index + 1}`);
 
-      if (isExpanded) {
-        document.getElementById("projets").scrollIntoView({ behavior: "smooth" });
-      }
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "project-tab";
+      tab.id = `project-tab-${index + 1}`;
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-controls", cardId);
+      tab.innerHTML = `
+        <span class="project-tab-number">${String(index + 1).padStart(2, "0")}</span>
+        <span class="project-tab-text">
+          <span class="project-tab-title"></span>
+          <span class="project-tab-lang"></span>
+        </span>`;
+      tab.querySelector(".project-tab-title").textContent = title ? title.textContent.trim() : "";
+      tab.querySelector(".project-tab-lang").textContent = language ? language.textContent.trim() : "";
+
+      tab.addEventListener("click", () => {
+        selectProject(index, false);
+
+        // Sur mobile la carte est sous la liste : on la fait juste entrer dans l'écran si elle en sort
+        const cardRect = card.getBoundingClientRect();
+        if (cardRect.top > window.innerHeight - 160) {
+          card.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
+        }
+      });
+      tab.addEventListener("keydown", (event) => {
+        const lastIndex = projectCards.length - 1;
+        const keyTargets = {
+          ArrowDown: index === lastIndex ? 0 : index + 1,
+          ArrowRight: index === lastIndex ? 0 : index + 1,
+          ArrowUp: index === 0 ? lastIndex : index - 1,
+          ArrowLeft: index === 0 ? lastIndex : index - 1,
+          Home: 0,
+          End: lastIndex
+        };
+        if (!(event.key in keyTargets)) return;
+        event.preventDefault();
+        selectProject(keyTargets[event.key], true);
+      });
+
+      projectTabList.appendChild(tab);
+      projectTabs.push(tab);
     });
+
+    projectTabList.hidden = false;
+    projectsExplorer.classList.add("is-enhanced");
+    selectProject(0, false);
   }
 
   const dockBubble = document.getElementById("dock-bubble");
@@ -170,7 +219,15 @@ document.addEventListener("DOMContentLoaded", () => {
     { label: "Keycloak" }, { label: "Git" }, { label: "GitHub" }, { label: "Linux" },
     { label: "macOS" }, { label: "Bash" }, { label: "HTML" }, { label: "CSS" },
     { label: "A-Frame" }, { label: "MindAR" }, { label: "WebAR" }, { label: "POO" },
-    { label: "Agile" }, { label: "Vision par ordinateur" }, { label: "IA" }, { label: "Claude Code" }
+    { label: "Agile" }, { label: "Vision par ordinateur" }, { label: "IA" }, { label: "Claude Code" },
+    { label: "Antigravity" }, { label: "CloudNativePG" }, { label: "KrakenD" }, { label: "OIDC" },
+    { label: "JWT" }, { label: "Minikube" }, { label: "Service Worker" }, { label: "Jinja" },
+    { label: "Tkinter" }, { label: "Swing" }, { label: "Jupyter" }, { label: "NoSQL" },
+    { label: "Bootstrap" }, { label: "WordPress" }, { label: "Haversine" }, { label: "Réalité augmentée" },
+    { label: "Documentation" }, { label: "Anglais B2" }, { label: "Zebra" }, { label: "API" },
+    { label: "PHP", key: true }, { label: "Symfony", key: true }, { label: "Java", key: true },
+    { label: "Python", key: true }, { label: "Kubernetes", key: true }, { label: "Git" },
+    { label: "Spring Boot" }, { label: "SQL" }, { label: "Docker" }, { label: "IA" }
   ];
 
   if (heroSection && heroOrbit) {
@@ -188,7 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
       return { element: word, x: Math.cos(angle) * ringRadius, y, z: Math.sin(angle) * ringRadius };
     });
 
-    let sphereRadius = 0;
+    let sphereRadiusX = 0;
+    let sphereRadiusY = 0;
     let rotationX = 0.35;
     let rotationY = 0;
     let speedX = 0.0008;
@@ -200,14 +258,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateSphereRadius() {
       const sectionRect = heroSection.getBoundingClientRect();
-      sphereRadius = Math.min(sectionRect.width * 0.46, sectionRect.height * 0.42, 520);
+      sphereRadiusY = Math.min(sectionRect.height * 0.42, 520);
+      let cardHalfWidth = 0;
 
-      // La sphère tourne autour de la carte, pas du centre de la section
+      // La sphère tourne autour de la carte, pas du centre de la section, sans sortir de l'écran par le haut
       if (heroCard) {
         const cardRect = heroCard.getBoundingClientRect();
         const cardCenterY = cardRect.top + cardRect.height / 2 - sectionRect.top;
         heroOrbit.style.setProperty("--orbit-center-y", `${cardCenterY.toFixed(0)}px`);
+        sphereRadiusY = Math.min(sphereRadiusY, cardCenterY * 0.82);
+        cardHalfWidth = cardRect.width / 2;
       }
+
+      // Ellipsoïde plus large que haut : les mots débordent de chaque côté de la carte
+      sphereRadiusX = Math.min(sectionRect.width * 0.46, Math.max(sphereRadiusY, cardHalfWidth * 1.35), 680);
     }
 
     function renderOrbit() {
@@ -215,7 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const sinX = Math.sin(rotationX);
       const cosY = Math.cos(rotationY);
       const sinY = Math.sin(rotationY);
-      const perspective = sphereRadius * 2.6;
+      const perspective = 2.6;
 
       orbitPoints.forEach((point) => {
         const x1 = point.x * cosY + point.z * sinY;
@@ -224,9 +288,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const z2 = z1 * cosX + point.y * sinX;
 
         const depth = (z2 + 1) / 2;
-        const scale = perspective / (perspective - z2 * sphereRadius);
-        const screenX = x1 * sphereRadius * scale;
-        const screenY = y1 * sphereRadius * scale;
+        const scale = perspective / (perspective - z2);
+        const screenX = x1 * sphereRadiusX * scale;
+        const screenY = y1 * sphereRadiusY * scale;
 
         point.element.style.transform =
           `translate(-50%, -50%) translate3d(${screenX.toFixed(1)}px, ${screenY.toFixed(1)}px, 0) scale(${(0.7 + depth * 0.5).toFixed(3)})`;
@@ -311,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const revealGroups = [
       document.querySelectorAll(".section-header"),
       document.querySelectorAll(".exp-row"),
-      document.querySelectorAll(".project-card"),
+      document.querySelectorAll(".projects-explorer"),
       document.querySelectorAll(".contact-box")
     ];
 
