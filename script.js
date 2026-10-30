@@ -249,8 +249,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let sphereRadiusY = 0;
     let rotationX = 0.35;
     let rotationY = 0;
-    let speedX = 0.0008;
-    let speedY = 0.004;
+    // Vitesses de rotation (radians par image) ; orbitSpeedFactor règle la vitesse globale du nuage
+    const orbitSpeedFactor = 0.8;
+    const baseSpeedX = 0.0008 * orbitSpeedFactor;
+    const baseSpeedY = 0.004 * orbitSpeedFactor;
+    let speedX = baseSpeedX;
+    let speedY = baseSpeedY;
     let targetSpeedX = speedX;
     let targetSpeedY = speedY;
     let heroVisible = true;
@@ -328,8 +332,8 @@ document.addEventListener("DOMContentLoaded", () => {
           const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
           const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
 
-          targetSpeedY = 0.004 + offsetX * 0.014;
-          targetSpeedX = 0.0008 - offsetY * 0.008;
+          targetSpeedY = baseSpeedY + offsetX * 0.014 * orbitSpeedFactor;
+          targetSpeedX = baseSpeedX - offsetY * 0.008 * orbitSpeedFactor;
 
           if (heroCard) {
             heroCard.style.setProperty("--hero-ry", `${(offsetX * 6).toFixed(2)}deg`);
@@ -338,8 +342,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         heroSection.addEventListener("pointerleave", () => {
-          targetSpeedX = 0.0008;
-          targetSpeedY = 0.004;
+          targetSpeedX = baseSpeedX;
+          targetSpeedY = baseSpeedY;
           if (heroCard) {
             heroCard.style.setProperty("--hero-ry", "0deg");
             heroCard.style.setProperty("--hero-rx", "0deg");
