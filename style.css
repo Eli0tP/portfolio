@@ -1,26 +1,30 @@
 :root {
-  --color-primary: #FF5E1E;
-  --color-primary-hover: #C93B00;
+  /* DA vert forêt : #0D2818 en couleur principale, sauge clair pour les accents sur fonds sombres */
+  --color-primary: #0D2818;
+  --color-primary-hover: #1E4D34;
+  --color-primary-dark: #071A0F;
+  --color-primary-bright: #2F7A4E;
+  --color-accent: #9DD3AE;
   --color-bg: #FDFBF7;
   --color-bg-alt: #F0E8D8;
   --color-card: #FFFFFF;
-  --color-accent-subtle: color-mix(in srgb, var(--color-primary) 8%, white);
-  --color-primary-subtle: color-mix(in srgb, var(--color-primary) 14%, white);
+  --color-accent-subtle: color-mix(in srgb, var(--color-accent) 16%, white);
+  --color-primary-subtle: color-mix(in srgb, var(--color-accent) 32%, white);
   --color-ink: #1C1E21;
   --color-white: #FFFFFF;
   --color-text: var(--color-ink);
   --color-text-muted: #64707D;
   --color-text-light: color-mix(in srgb, var(--color-text-muted) 65%, white);
   --color-border: var(--color-bg-alt);
-  --color-border-hover: color-mix(in srgb, var(--color-primary) 22%, white);
+  --color-border-hover: color-mix(in srgb, var(--color-accent) 70%, white);
 
   --font-title: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
 
   --shadow-sm: 0 2px 8px rgba(28, 30, 33, 0.05);
-  --shadow-md: 0 8px 24px rgba(201, 59, 0, 0.10);
-  --shadow-hover: 0 14px 32px rgba(201, 59, 0, 0.16);
+  --shadow-md: 0 8px 24px rgba(13, 40, 24, 0.10);
+  --shadow-hover: 0 14px 32px rgba(13, 40, 24, 0.16);
   --shadow-card: 0 4px 20px rgba(28, 30, 33, 0.06);
 
   --radius-sm: 8px;
@@ -54,6 +58,11 @@ body {
   -webkit-font-smoothing: antialiased;
   position: relative;
   overflow-x: clip;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 img {
@@ -107,7 +116,7 @@ button {
   flex-direction: column;
   align-items: center;
   gap: 0;
-  background-color: var(--color-ink);
+  background-color: var(--color-primary);
   border-radius: var(--radius-pill);
   padding: 10px 0;
   width: 54px;
@@ -121,14 +130,14 @@ button {
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
   border-radius: 50%;
   z-index: 0;
   transition: top 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 0.25s ease;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.55),
+  box-shadow: 0 4px 14px rgba(157, 211, 174, 0.55),
     inset 0 -2px 6px rgba(0, 0, 0, 0.18);
 }
 
@@ -149,7 +158,7 @@ button {
 
 .dock-link:hover,
 .dock-link.active {
-  color: var(--color-white);
+  color: var(--color-primary);
   transform: translateY(-2px) scale(1.08);
 }
 
@@ -158,7 +167,7 @@ button {
   left: calc(100% + 14px);
   top: 50%;
   transform: translateY(-50%) translateX(-6px);
-  background-color: var(--color-ink);
+  background-color: var(--color-primary);
   color: var(--color-white);
   font-size: 0.78rem;
   font-weight: 600;
@@ -214,7 +223,7 @@ button {
 }
 
 .logo-accent {
-  color: var(--color-primary);
+  color: var(--color-primary-bright);
 }
 
 .nav-menu {
@@ -290,7 +299,7 @@ button {
   height: 100dvh;
   min-height: 100vh;
   min-height: 100dvh;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary) 45%, var(--color-primary-hover) 100%);
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 50%, var(--color-primary-dark) 100%);
   color: var(--color-white);
   display: flex;
   flex-direction: column;
@@ -310,7 +319,7 @@ button {
   width: 600px;
   height: 600px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.16) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(157, 211, 174, 0.16) 0%, transparent 65%);
   pointer-events: none;
 }
 
@@ -322,7 +331,7 @@ button {
   width: 550px;
   height: 550px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 0, 0, 0.12) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.22) 0%, transparent 65%);
   pointer-events: none;
 }
 
@@ -346,7 +355,7 @@ button {
   border-radius: var(--radius-pill);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--color-primary-hover);
+  color: var(--color-primary);
   margin-top: 35px;
   margin-bottom: 28px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
@@ -363,17 +372,17 @@ button {
 @keyframes pulse-dot {
   0% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 0 rgba(255, 94, 30, 0.7);
+    box-shadow: 0 0 0 0 rgba(157, 211, 174, 0.8);
   }
 
   70% {
     transform: scale(1.1);
-    box-shadow: 0 0 0 7px rgba(255, 94, 30, 0);
+    box-shadow: 0 0 0 7px rgba(157, 211, 174, 0);
   }
 
   100% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 0 rgba(255, 94, 30, 0);
+    box-shadow: 0 0 0 0 rgba(157, 211, 174, 0);
   }
 }
 
@@ -413,7 +422,7 @@ button {
   padding: 56px 64px;
   max-width: 860px;
   width: 100%;
-  box-shadow: 0 20px 50px rgba(201, 59, 0, 0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   position: relative;
   transform: perspective(1200px) rotateX(var(--hero-rx)) rotateY(var(--hero-ry));
   transition: border-color 0.35s ease, background 0.35s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
@@ -454,7 +463,7 @@ button {
 .highlight-tag {
   display: inline-block;
   background-color: var(--color-card);
-  color: var(--color-primary-hover);
+  color: var(--color-primary);
   padding: 4px 12px;
   border-radius: var(--radius-sm);
   font-weight: 800;
@@ -646,13 +655,13 @@ button {
 .exp-row:hover .exp-role,
 .exp-row:focus-within .exp-role,
 .exp-row.is-open .exp-role {
-  color: var(--color-primary);
+  color: var(--color-primary-bright);
 }
 
 .exp-row:hover .exp-toggle-icon,
 .exp-row:focus-within .exp-toggle-icon,
 .exp-row.is-open .exp-toggle-icon {
-  color: var(--color-primary);
+  color: var(--color-primary-bright);
   transform: rotate(45deg);
 }
 
@@ -759,7 +768,7 @@ button {
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%),
-      color-mix(in srgb, var(--color-primary) 12%, transparent) 0%, transparent 55%);
+      color-mix(in srgb, var(--color-accent) 35%, transparent) 0%, transparent 55%);
   opacity: 0;
   transition: opacity 0.35s ease;
   pointer-events: none;
@@ -913,7 +922,7 @@ button {
 
 .project-tab[aria-selected="true"] .project-tab-number,
 .project-tab[aria-selected="true"] .project-tab-title {
-  color: var(--color-primary);
+  color: var(--color-primary-bright);
 }
 
 /* Toutes les cartes partagent la même cellule : la hauteur ne bouge pas quand on change de projet */
@@ -985,7 +994,7 @@ button {
 
 .project-github:hover,
 .project-github:focus-visible {
-  color: var(--color-primary-hover);
+  color: var(--color-primary-bright);
   border-color: var(--color-primary);
   background-color: var(--color-primary-subtle);
   transform: translateY(-2px) scale(1.08);
@@ -1098,13 +1107,13 @@ button {
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.35);
+  box-shadow: 0 4px 14px rgba(13, 40, 24, 0.3);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(201, 59, 0, 0.45);
+  box-shadow: 0 6px 20px rgba(13, 40, 24, 0.45);
 }
 
 .btn-large {
