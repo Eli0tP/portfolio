@@ -264,6 +264,17 @@ button {
   color: var(--color-white);
 }
 
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-hover));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
 .hero-sticky-container {
   position: relative;
   width: 100%;
@@ -366,7 +377,34 @@ button {
   }
 }
 
+.hero-orbit {
+  position: absolute;
+  inset: 0;
+  list-style: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.orbit-word {
+  position: absolute;
+  top: var(--orbit-center-y, 50%);
+  left: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-white);
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+.orbit-word--key {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
 .hero-card {
+  --hero-rx: 0deg;
+  --hero-ry: 0deg;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -377,13 +415,13 @@ button {
   width: 100%;
   box-shadow: 0 20px 50px rgba(201, 59, 0, 0.25);
   position: relative;
-  transition: var(--transition-default);
+  transform: perspective(1200px) rotateX(var(--hero-rx)) rotateY(var(--hero-ry));
+  transition: border-color 0.35s ease, background 0.35s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .hero-card:hover {
   border-color: rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
 }
 
 .hero-greeting {
@@ -713,6 +751,39 @@ button {
   transform: translateY(-6px);
   border-color: var(--color-border-hover);
   box-shadow: var(--shadow-hover);
+}
+
+.project-card.is-tilting {
+  transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-6px);
+  transition: transform 0.12s ease-out, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--glare-x, 50%) var(--glare-y, 50%),
+      color-mix(in srgb, var(--color-primary) 12%, transparent) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.project-card.is-tilting::after {
+  opacity: 1;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1), transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 .project-header {
@@ -1117,5 +1188,30 @@ button {
 
   .nav-menu .nav-item:not(.nav-btn) {
     display: none;
+  }
+
+  .orbit-word {
+    font-size: 0.78rem;
+  }
+
+  .orbit-word--key {
+    font-size: 0.86rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-card,
+  .project-card {
+    transform: none !important;
   }
 }
