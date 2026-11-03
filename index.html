@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
@@ -68,32 +68,55 @@
   <main>
     <section id="hero" class="hero-section">
       <div class="container hero-container">
-        <p class="hero-kicker">
-          <span class="status-dot" aria-hidden="true"></span>
-          En alternance chez WESCO depuis septembre 2026
-        </p>
 
-        <h1 class="hero-name">Eliot<br>Péchadre<span class="hero-dot">.</span></h1>
-
-        <div class="hero-bottom">
-          <div>
-            <p class="hero-subtitle">
-              Développeur <strong>PHP/Symfony</strong> en alternance chez <strong>WESCO</strong>
-              et étudiant en Bachelor IA à l'<strong>ECE Paris</strong>.
-            </p>
-            <div class="hero-actions">
-              <a href="#projets" class="btn btn-primary">Voir mes projets</a>
-              <a href="#contact" class="btn btn-secondary">Me contacter</a>
+        <article class="shipping-label">
+          <header class="label-top">
+            <div>
+              <span class="label-key">Expéditeur</span>
+              <span class="label-value">Niort, Deux-Sèvres</span>
             </div>
-          </div>
+            <div>
+              <span class="label-key">Statut</span>
+              <span class="label-value"><span class="status-dot" aria-hidden="true"></span> En alternance depuis septembre 2026</span>
+            </div>
+          </header>
 
-          <ul class="hero-meta">
-            <li><span>Entreprise</span> WESCO, Cerizay</li>
-            <li><span>École</span> ECE Paris</li>
-            <li><span>Région</span> Niort</li>
-            <li><span>Code</span> <a href="https://github.com/Eli0tP" target="_blank" rel="noopener noreferrer">github.com/Eli0tP</a></li>
-          </ul>
+          <h1 class="hero-name">Eliot<br>Péchadre<span class="hero-dot">.</span></h1>
+
+          <dl class="label-grid">
+            <div>
+              <dt>Contenu</dt>
+              <dd>Développeur PHP/Symfony</dd>
+            </div>
+            <div>
+              <dt>Entreprise</dt>
+              <dd>WESCO, Cerizay</dd>
+            </div>
+            <div>
+              <dt>Formation</dt>
+              <dd>Bachelor IA, ECE Paris</dd>
+            </div>
+          </dl>
+
+          <footer class="label-bottom">
+            <!-- Code-barres Code 128 réel : scanné, il donne l'adresse du profil GitHub -->
+            <svg class="label-barcode" viewBox="0 0 222 40" preserveAspectRatio="none" role="img" aria-label="Code-barres : github.com/Eli0tP" fill="currentColor"><rect x="0" width="2" height="40"/><rect x="3" width="1" height="40"/><rect x="6" width="1" height="40"/><rect x="11" width="1" height="40"/><rect x="14" width="2" height="40"/><rect x="17" width="1" height="40"/><rect x="22" width="1" height="40"/><rect x="27" width="2" height="40"/><rect x="30" width="1" height="40"/><rect x="33" width="1" height="40"/><rect x="36" width="4" height="40"/><rect x="41" width="1" height="40"/><rect x="44" width="1" height="40"/><rect x="47" width="2" height="40"/><rect x="53" width="1" height="40"/><rect x="55" width="1" height="40"/><rect x="58" width="4" height="40"/><rect x="64" width="1" height="40"/><rect x="66" width="1" height="40"/><rect x="69" width="1" height="40"/><rect x="74" width="2" height="40"/><rect x="77" width="1" height="40"/><rect x="80" width="2" height="40"/><rect x="84" width="3" height="40"/><rect x="88" width="1" height="40"/><rect x="93" width="1" height="40"/><rect x="95" width="2" height="40"/><rect x="99" width="1" height="40"/><rect x="103" width="4" height="40"/><rect x="108" width="1" height="40"/><rect x="110" width="4" height="40"/><rect x="115" width="3" height="40"/><rect x="119" width="1" height="40"/><rect x="121" width="1" height="40"/><rect x="123" width="3" height="40"/><rect x="128" width="2" height="40"/><rect x="132" width="1" height="40"/><rect x="136" width="2" height="40"/><rect x="139" width="1" height="40"/><rect x="143" width="2" height="40"/><rect x="147" width="1" height="40"/><rect x="149" width="1" height="40"/><rect x="154" width="1" height="40"/><rect x="159" width="2" height="40"/><rect x="162" width="1" height="40"/><rect x="165" width="1" height="40"/><rect x="168" width="3" height="40"/><rect x="172" width="2" height="40"/><rect x="176" width="1" height="40"/><rect x="179" width="4" height="40"/><rect x="184" width="1" height="40"/><rect x="187" width="3" height="40"/><rect x="191" width="3" height="40"/><rect x="195" width="2" height="40"/><rect x="198" width="2" height="40"/><rect x="202" width="1" height="40"/><rect x="207" width="1" height="40"/><rect x="209" width="2" height="40"/><rect x="214" width="3" height="40"/><rect x="218" width="1" height="40"/><rect x="220" width="2" height="40"/></svg>
+            <span class="label-code"><a href="https://github.com/Eli0tP" target="_blank" rel="noopener noreferrer">github.com/Eli0tP</a></span>
+          </footer>
+        </article>
+
+        <div class="hero-aside">
+          <p class="hero-subtitle">
+            J'ai commencé chez <strong>WESCO</strong> en préparant les commandes de l'entrepôt.
+            J'y fais aujourd'hui évoluer une application interne en <strong>PHP/Symfony</strong>,
+            en parallèle de mon Bachelor IA à l'<strong>ECE Paris</strong>.
+          </p>
+          <div class="hero-actions">
+            <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+            <a href="#contact" class="btn btn-secondary">Me contacter</a>
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -103,7 +126,7 @@
         <div class="container">
 
           <div class="section-header">
-            <span class="section-tag">Parcours &amp; Formations</span>
+            <span class="section-tag">Parcours et formations</span>
             <h2 class="section-title" id="timeline-title">Expériences &amp; Études</h2>
           </div>
 
@@ -273,7 +296,7 @@
         <div class="container">
 
           <div class="section-header">
-            <span class="section-tag">&lt;/&gt; Réalisations informatiques</span>
+            <span class="section-tag">Réalisations informatiques</span>
             <h2 class="section-title" id="projects-title">Mes projets clés</h2>
             <p class="section-description">
               Retrouvez le code source complet et d'autres projets sur mon profil
