@@ -1887,4 +1887,434 @@ button {
   .project-card {
     transform: none !important;
   }
+}/* ==========================================================================
+   Mode terminal appliqué à tout le site
+   Les règles ne s'appliquent que lorsque body porte data-mode="terminal" :
+   les modes assistant et classique ne changent pas.
+   ========================================================================== */
+body[data-mode="terminal"] {
+  --t-bg: #0C0C0C;
+  --t-page: #1B1D22;
+  --t-line: #2E3138;
+  --t-text: #D4D4D4;
+  --t-muted: #9AA3AD;
+  --t-green: #4EF04E;
+  --t-red: #F25656;
+  --t-blue: #8C96FF;
+  --color-bg: var(--t-page);
+  --color-bg-alt: #15171A;
+  --color-card: var(--t-bg);
+  --color-ink: var(--t-text);
+  --color-text: var(--t-text);
+  --color-text-muted: var(--t-muted);
+  --color-text-light: var(--t-muted);
+  --color-border: var(--t-line);
+  --color-border-hover: var(--t-green);
+  --color-primary: var(--t-green);
+  --color-primary-hover: var(--t-green);
+  --color-primary-text: var(--t-green);
+  --color-primary-subtle: #12301A;
+  --color-accent-subtle: var(--t-bg);
+  --font-title: var(--font-mono);
+  --font-sans: var(--font-mono);
+  background-color: var(--t-page);
+  color: var(--t-text);
+  font-family: var(--font-mono);
+}
+
+/* ----- Navigation, barre sociale, sélecteur ----- */
+body[data-mode="terminal"] .site-nav-wrapper {
+  background-color: rgba(12, 12, 12, 0.92);
+  border-bottom-color: var(--t-line);
+}
+
+body[data-mode="terminal"] .nav-logo {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .nav-logo::before {
+  content: "~/";
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .nav-item {
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .nav-item:hover {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .nav-cv-btn,
+body[data-mode="terminal"] .nav-item.nav-btn {
+  background-color: transparent;
+  border: 1px solid var(--t-green);
+  border-radius: 4px;
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .nav-cv-btn:hover,
+body[data-mode="terminal"] .nav-item.nav-btn:hover {
+  background-color: var(--t-green);
+  color: var(--t-bg);
+}
+
+body[data-mode="terminal"] .scroll-progress {
+  background: var(--t-green);
+}
+
+body[data-mode="terminal"] .dock-container {
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-line);
+  border-radius: 6px;
+}
+
+body[data-mode="terminal"] .dock-link {
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .dock-link:hover {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .dock-bubble {
+  background-color: #12301A;
+  border-radius: 4px;
+}
+
+body[data-mode="terminal"] .dock-tooltip {
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-line);
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .mode-switch {
+  background-color: var(--t-bg);
+  border-color: var(--t-line);
+  border-radius: 6px;
+}
+
+body[data-mode="terminal"] .mode-switch button {
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .mode-switch button[aria-pressed="true"] {
+  background-color: var(--t-green);
+  color: var(--t-bg);
+}
+
+/* ----- En-têtes de section : une commande tapée, puis son résultat ----- */
+body[data-mode="terminal"] .section-header {
+  text-align: left;
+  max-width: 960px;
+  margin-bottom: 28px;
+}
+
+body[data-mode="terminal"] .section-tag {
+  display: block;
+  background: none;
+  padding: 0;
+  margin-bottom: 6px;
+  color: var(--t-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+body[data-mode="terminal"] .section-tag::before {
+  content: "# ";
+}
+
+body[data-mode="terminal"] .section-title {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 700;
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .section-title::before {
+  content: "$ ";
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .section-description {
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .text-link {
+  color: var(--t-blue);
+}
+
+/* ----- Parcours : sortie de commande ----- */
+body[data-mode="terminal"] .timeline-section {
+  background-color: var(--t-page);
+}
+
+body[data-mode="terminal"] .exp-table {
+  max-width: 960px;
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-line);
+  border-radius: 8px;
+  padding: 6px 0;
+}
+
+body[data-mode="terminal"] .exp-row {
+  border-bottom: 1px dashed var(--t-line);
+}
+
+body[data-mode="terminal"] .exp-row:hover,
+body[data-mode="terminal"] .exp-row:focus-within,
+body[data-mode="terminal"] .exp-row.is-open {
+  background-color: #111A13;
+  border-left-color: var(--t-green);
+}
+
+body[data-mode="terminal"] .exp-date {
+  color: var(--t-red);
+}
+
+body[data-mode="terminal"] .exp-role {
+  font-weight: 600;
+}
+
+body[data-mode="terminal"] .exp-company {
+  color: var(--t-blue);
+}
+
+body[data-mode="terminal"] .exp-subline {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .exp-subline strong,
+body[data-mode="terminal"] .exp-desc strong {
+  color: var(--t-text);
+}
+
+/* ----- Étiquettes : entre crochets ----- */
+body[data-mode="terminal"] .tag,
+body[data-mode="terminal"] .project-techs li {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 2px 0;
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .tag::before,
+body[data-mode="terminal"] .project-techs li::before {
+  content: "[";
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .tag::after,
+body[data-mode="terminal"] .project-techs li::after {
+  content: "]";
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .tag-list,
+body[data-mode="terminal"] .project-techs {
+  gap: 4px 14px;
+}
+
+/* ----- Projets : liste de fichiers et fenêtre de terminal ----- */
+body[data-mode="terminal"] .projects-section {
+  background-color: #15171A;
+}
+
+body[data-mode="terminal"] .project-tab {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-left: 3px solid transparent;
+  border-radius: 4px;
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .project-tab:hover {
+  background-color: var(--t-bg);
+  border-color: var(--t-line);
+}
+
+body[data-mode="terminal"] .project-tab[aria-selected="true"] {
+  background-color: var(--t-bg);
+  border-color: var(--t-line);
+  border-left-color: var(--t-green);
+  box-shadow: none;
+}
+
+body[data-mode="terminal"] .project-tab-number {
+  color: var(--t-red);
+}
+
+body[data-mode="terminal"] .project-tab-title {
+  font-size: 0.92rem;
+}
+
+body[data-mode="terminal"] .project-tab[aria-selected="true"] .project-tab-number,
+body[data-mode="terminal"] .project-tab[aria-selected="true"] .project-tab-title {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .project-tab-lang {
+  color: var(--t-blue);
+}
+
+body[data-mode="terminal"] .project-card {
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-line);
+  border-radius: 8px;
+  padding-top: 52px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+/* Barre de titre de fenêtre, comme celle du terminal d'accueil */
+body[data-mode="terminal"] .project-card::before {
+  content: "visiteur@portfolio-eliot: ~/projets";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 7px 14px;
+  border-radius: 8px 8px 0 0;
+  background-color: #F2F2F2;
+  color: #222222;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+}
+
+body[data-mode="terminal"] .project-card::after {
+  display: none;
+}
+
+body[data-mode="terminal"] .project-card:hover {
+  transform: none;
+  border-color: var(--t-line);
+}
+
+body[data-mode="terminal"] .project-category {
+  color: var(--t-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+body[data-mode="terminal"] .project-category::before {
+  content: "# ";
+}
+
+body[data-mode="terminal"] .project-lang {
+  background: none;
+  color: var(--t-red);
+  padding: 0;
+}
+
+body[data-mode="terminal"] .card-title {
+  color: var(--t-green);
+  font-weight: 700;
+}
+
+body[data-mode="terminal"] .project-desc {
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .project-github {
+  border: 1px solid var(--t-green);
+  border-radius: 4px;
+  background: none;
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .project-github:hover,
+body[data-mode="terminal"] .project-github:focus-visible {
+  background-color: var(--t-green);
+  color: var(--t-bg);
+}
+
+/* ----- Contact ----- */
+body[data-mode="terminal"] .contact-box {
+  background: var(--t-bg);
+  border: 1px solid var(--t-line);
+  border-radius: 8px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+body[data-mode="terminal"] .contact-badge {
+  color: var(--t-muted);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+body[data-mode="terminal"] .contact-badge::before {
+  content: "$ ";
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .contact-title {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .contact-desc,
+body[data-mode="terminal"] .contact-desc strong {
+  color: var(--t-text);
+}
+
+body[data-mode="terminal"] .contact-detail-item {
+  color: var(--t-blue);
+}
+
+body[data-mode="terminal"] .btn {
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+body[data-mode="terminal"] .btn-primary {
+  background-color: var(--t-green);
+  color: var(--t-bg);
+  box-shadow: none;
+}
+
+body[data-mode="terminal"] .btn-primary:hover {
+  background-color: #7DF77D;
+  box-shadow: none;
+}
+
+/* ----- Fenêtre CV et pied de page ----- */
+body[data-mode="terminal"] .modal-content {
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-line);
+  border-radius: 8px;
+}
+
+body[data-mode="terminal"] .modal-header h2 {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .cv-summary-card {
+  background-color: #15171A;
+  border-radius: 4px;
+}
+
+body[data-mode="terminal"] .cv-summary-card h3 {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] .cv-summary-card a {
+  color: var(--t-blue);
+}
+
+body[data-mode="terminal"] .site-footer {
+  background-color: var(--t-bg);
+  border-top: 1px solid var(--t-line);
+  color: var(--t-muted);
+}
+
+body[data-mode="terminal"] .footer-links a:hover {
+  color: var(--t-green);
+}
+
+body[data-mode="terminal"] ::selection {
+  background-color: var(--t-green);
+  color: var(--t-bg);
 }
