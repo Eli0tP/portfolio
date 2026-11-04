@@ -66,35 +66,69 @@
   </header>
 
   <main>
-    <div class="hero-sticky-container">
-      <section id="hero" class="hero-section">
-        <ul class="hero-orbit" id="hero-orbit" aria-hidden="true"></ul>
-        <div class="container hero-container">
+    <section id="hero" class="assistant" aria-label="Accueil : posez vos questions sur Eliot">
+      <aside class="assistant-sidebar" aria-label="Conversations">
+        <a href="#hero" class="assistant-brand" aria-label="Eliot Péchadre">
+          <span class="assistant-avatar" aria-hidden="true">EP</span>
+          <span>Eliot.</span>
+        </a>
 
-          <div class="status-badge">
-            <span class="status-dot" aria-hidden="true"></span>
-            <span>En alternance chez WESCO depuis septembre 2026</span>
-          </div>
+        <button type="button" class="assistant-new" data-reset>
+          <span aria-hidden="true">+</span> Nouvelle conversation
+        </button>
 
-          <div class="hero-card">
-            <p class="hero-greeting">Bonjour, je suis</p>
-            <h1 class="hero-name">Eliot Péchadre</h1>
-            <p class="hero-subtitle">
-              <span class="highlight-tag">&lt; Développeur /&gt;</span>
-              Développeur PHP/Symfony en alternance chez <strong>WESCO</strong> • Bachelor IA à l'ECE Paris
-            </p>
-          </div>
+        <p class="assistant-sidebar-label">Sujets fréquents</p>
+        <ul class="assistant-history">
+          <li><button type="button" data-ask="Qui es-tu ?">Qui es-tu ?</button></li>
+          <li><button type="button" data-ask="Que fais-tu chez WESCO ?">Que fais-tu chez WESCO ?</button></li>
+          <li><button type="button" data-ask="Quel est ton parcours ?">Quel est ton parcours ?</button></li>
+          <li><button type="button" data-ask="Montre-moi tes projets">Montre-moi tes projets</button></li>
+          <li><button type="button" data-ask="Quelles technologies maîtrises-tu ?">Quelles technologies maîtrises-tu ?</button></li>
+          <li><button type="button" data-ask="Comment te contacter ?">Comment te contacter ?</button></li>
+        </ul>
 
-          <a href="#timeline-section" class="scroll-cue" aria-label="Faire défiler vers le parcours">
-            <span class="scroll-cue-text">Faire défiler pour explorer</span>
-            <span class="mouse-icon" aria-hidden="true">
-              <span class="mouse-wheel"></span>
-            </span>
-          </a>
-
+        <div class="assistant-profile">
+          <span class="assistant-avatar assistant-avatar--small" aria-hidden="true">EP</span>
+          <span>
+            <strong>Eliot Péchadre</strong>
+            <span>Développeur en alternance</span>
+          </span>
         </div>
-      </section>
-    </div>
+      </aside>
+
+      <div class="assistant-main">
+        <div class="assistant-welcome" id="assistant-welcome">
+          <p class="assistant-status"><span class="status-dot" aria-hidden="true"></span> En alternance chez WESCO depuis septembre 2026</p>
+          <h1 class="assistant-greeting">Bonjour, je suis Eliot.<br><span>Que voulez-vous savoir sur moi ?</span></h1>
+        </div>
+
+        <div class="assistant-log" id="assistant-log" aria-live="polite" hidden></div>
+
+        <form class="assistant-form" id="assistant-form">
+          <label for="assistant-input" class="visually-hidden">Votre question</label>
+          <textarea id="assistant-input" rows="1" placeholder="Posez une question sur mon parcours, mes projets, mon alternance…"
+            autocomplete="off"></textarea>
+          <div class="assistant-form-bar">
+            <span class="assistant-hint">Réponses écrites à l'avance par Eliot, sans intelligence artificielle</span>
+            <button type="submit" class="assistant-send" aria-label="Envoyer la question">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path d="M12 19V5M5 12l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </form>
+
+        <div class="assistant-chips" id="assistant-chips">
+          <button type="button" data-ask="Qui es-tu ?">Qui es-tu ?</button>
+          <button type="button" data-ask="Montre-moi tes projets">Tes projets</button>
+          <button type="button" data-ask="Que fais-tu chez WESCO ?">Ton alternance</button>
+          <button type="button" data-ask="Comment te contacter ?">Te contacter</button>
+        </div>
+
+        <a href="#timeline-section" class="assistant-scroll">Ou parcourir le site classique ↓</a>
+      </div>
+    </section>
 
     <div class="main-content-flow" id="main-content-flow">
 

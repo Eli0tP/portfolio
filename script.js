@@ -184,14 +184,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  function getHeroPeek() {
-    const rootStyles = getComputedStyle(document.documentElement);
-    return parseFloat(rootStyles.getPropertyValue("--hero-peek")) || 0;
-  }
-
   const customScrollTargets = {
-    "#hero": () => 0,
-    "#timeline-section": getHeroPeek
+    "#hero": () => 0
   };
 
   document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -207,150 +201,268 @@ document.addEventListener("DOMContentLoaded", () => {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-  // Sphère 3D des technologies derrière la carte du hero
-  const heroSection = document.getElementById("hero");
-  const heroOrbit = document.getElementById("hero-orbit");
-  const heroCard = document.querySelector(".hero-card");
-  const orbitTechnologies = [
-    { label: "PHP", key: true }, { label: "Symfony", key: true }, { label: "Java", key: true },
-    { label: "Python", key: true }, { label: "Kubernetes", key: true }, { label: "Docker", key: true },
-    { label: "Spring Boot" }, { label: "Flask" }, { label: "JavaScript" }, { label: "SQL" },
-    { label: "PostgreSQL" }, { label: "MySQL" }, { label: "SQLite" }, { label: "Helm" },
-    { label: "Keycloak" }, { label: "Git" }, { label: "GitHub" }, { label: "Linux" },
-    { label: "macOS" }, { label: "Bash" }, { label: "HTML" }, { label: "CSS" },
-    { label: "A-Frame" }, { label: "MindAR" }, { label: "WebAR" }, { label: "POO" },
-    { label: "Agile" }, { label: "Vision par ordinateur" }, { label: "IA" }, { label: "Claude Code" },
-    { label: "Antigravity" }, { label: "CloudNativePG" }, { label: "KrakenD" }, { label: "OIDC" },
-    { label: "JWT" }, { label: "Minikube" }, { label: "Service Worker" }, { label: "Jinja" },
-    { label: "Tkinter" }, { label: "Swing" }, { label: "Jupyter" }, { label: "NoSQL" },
-    { label: "Bootstrap" }, { label: "WordPress" }, { label: "Haversine" }, { label: "Réalité augmentée" },
-    { label: "Documentation" }, { label: "Anglais B2" }, { label: "Zebra" }, { label: "API" },
-    { label: "PHP", key: true }, { label: "Symfony", key: true }, { label: "Java", key: true },
-    { label: "Python", key: true }, { label: "Kubernetes", key: true }, { label: "Git" },
-    { label: "Spring Boot" }, { label: "SQL" }, { label: "Docker" }, { label: "IA" }
+  // ===== Accueil en forme d'assistant : réponses écrites à l'avance, choisies par mots-clés =====
+  const assistant = document.getElementById("hero");
+  const assistantForm = document.getElementById("assistant-form");
+  const assistantInput = document.getElementById("assistant-input");
+  const assistantLog = document.getElementById("assistant-log");
+
+  // Supprime les accents et la casse pour comparer les mots-clés
+  function normalize(text) {
+    return text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Les projets sont lus directement dans la section Projets : une seule source de vérité
+  function readProjects() {
+    return [...document.querySelectorAll("#projects-grid .project-card")].map((card, index) => ({
+      index,
+      title: card.querySelector(".card-title").textContent.trim(),
+      language: card.querySelector(".project-lang").textContent.trim(),
+      description: card.querySelector(".project-desc").textContent.trim().replace(/\s+/g, " "),
+      link: card.querySelector(".project-github").href
+    }));
+  }
+
+  const projectKeywords = [
+    ["foodndeliv", "kubernetes", "spring", "keycloak", "cloud", "devops"],
+    ["realite augmentee", "webar", "fresque", "a-frame", "mindar", "galerie"],
+    ["otsu", "seuillage", "vision", "image"],
+    ["pac-man", "pacman", "pac man", "jeu"],
+    ["mentorat", "tutorat", "flask"],
+    ["solitaire", "cartes", "piles"],
+    ["gps", "haversine", "tkinter", "parcours gps", "carte"]
   ];
 
-  if (heroSection && heroOrbit) {
-    // Répartition régulière des mots sur la sphère (spirale de Fibonacci)
-    const orbitPoints = orbitTechnologies.map((technology, index) => {
-      const y = 1 - (2 * (index + 0.5)) / orbitTechnologies.length;
-      const ringRadius = Math.sqrt(1 - y * y);
-      const angle = index * Math.PI * (3 - Math.sqrt(5));
+  function projectAnswer(project) {
+    return {
+      html: `<p><strong>${escapeHtml(project.title)}</strong> (${escapeHtml(project.language)})</p>
+             <p>${escapeHtml(project.description)}</p>`,
+      actions: [
+        { label: "Voir le code sur GitHub", href: project.link, external: true },
+        { label: "Voir la fiche du projet", project: project.index }
+      ]
+    };
+  }
 
-      const word = document.createElement("li");
-      word.className = technology.key ? "orbit-word orbit-word--key" : "orbit-word";
-      word.textContent = technology.label;
-      heroOrbit.appendChild(word);
+  const answers = [
+    {
+      keys: ["contact", "contacter", "joindre", "mail", "e-mail", "email", "ecrire", "linkedin", "telephone"],
+      answer: () => ({
+        html: `<p>Le plus simple est de m'écrire à <strong>eliot.pechadre@gmail.com</strong>.
+               Vous pouvez aussi me retrouver sur LinkedIn et GitHub.</p>`,
+        actions: [
+          { label: "M'écrire un e-mail", href: "mailto:eliot.pechadre@gmail.com" },
+          { label: "LinkedIn", href: "https://www.linkedin.com/in/eliot-pechadre-28a961356/", external: true },
+          { label: "GitHub", href: "https://github.com/Eli0tP", external: true }
+        ]
+      })
+    },
+    {
+      keys: ["cv", "curriculum", "resume"],
+      answer: () => ({
+        html: "<p>Voici un résumé de mon profil. Vous pouvez aussi me demander mon CV complet en PDF par e-mail.</p>",
+        actions: [{ label: "Ouvrir le résumé du CV", cv: true }]
+      })
+    },
+    {
+      keys: ["wesco", "alternance", "entreprise", "travail", "poste", "symfony", "php", "cerizay", "metier"],
+      answer: () => ({
+        html: `<p>Depuis septembre 2026, je suis <strong>développeur en alternance</strong> au service informatique de
+               <strong>WESCO</strong>, à Cerizay.</p>
+               <ul>
+                 <li>Je corrige des bugs et je fais évoluer une application interne en <strong>PHP/Symfony</strong>.</li>
+                 <li>J'ai mis en place GitLab et GitHub pour le service, avec la documentation technique.</li>
+                 <li>Je déploie des postes macOS et j'installe le matériel logistique (imprimantes et scanners Zebra).</li>
+               </ul>
+               <p>Le rythme : 2 semaines à l'école, 3 semaines en entreprise.</p>`,
+        actions: [{ label: "Voir tout mon parcours", href: "#timeline-section" }]
+      })
+    },
+    {
+      keys: ["parcours", "etude", "formation", "ecole", "ece", "bachelor", "diplome", "malte", "bac", "experience"],
+      answer: () => ({
+        html: `<p>En bref :</p>
+               <ul>
+                 <li><strong>2021 – 2024</strong> : baccalauréat général, spécialités Mathématiques et NSI, à Niort.</li>
+                 <li><strong>2024 – 2026</strong> : Bachelor Informatique à l'ECE, campus de Rennes.</li>
+                 <li><strong>Février – juillet 2026</strong> : semestre d'échange à l'Université de Malte, entièrement en anglais.</li>
+                 <li><strong>Depuis septembre 2026</strong> : Bachelor IA à l'ECE Paris, en alternance chez WESCO.</li>
+               </ul>`,
+        actions: [{ label: "Voir le parcours détaillé", href: "#timeline-section" }]
+      })
+    },
+    {
+      keys: ["technologie", "competence", "langage", "stack", "outil", "maitrise", "sais faire", "skills"],
+      answer: () => ({
+        html: `<ul>
+                 <li><strong>Web</strong> : PHP/Symfony, JavaScript, HTML et CSS, Flask.</li>
+                 <li><strong>Langages</strong> : Java, Python, SQL.</li>
+                 <li><strong>DevOps</strong> : Docker, Kubernetes, Git, GitHub et GitLab, Linux.</li>
+                 <li><strong>Bases de données</strong> : PostgreSQL, MySQL, SQLite.</li>
+                 <li><strong>Autres</strong> : réalité augmentée (A-Frame, MindAR), vision par ordinateur.</li>
+               </ul>`,
+        actions: [{ label: "Voir les projets qui les utilisent", href: "#projets" }]
+      })
+    },
+    {
+      keys: ["qui", "presente", "toi", "bonjour", "salut", "hello", "eliot"],
+      answer: () => ({
+        html: `<p>Je m'appelle <strong>Eliot Péchadre</strong>. Je suis développeur PHP/Symfony en alternance chez
+               <strong>WESCO</strong>, et étudiant en Bachelor IA à l'<strong>ECE Paris</strong>.</p>
+               <p>Posez-moi une question sur mes projets, mon parcours ou mon alternance.</p>`,
+        actions: [
+          { label: "Tes projets", ask: "Montre-moi tes projets" },
+          { label: "Ton parcours", ask: "Quel est ton parcours ?" }
+        ]
+      })
+    }
+  ];
 
-      return { element: word, x: Math.cos(angle) * ringRadius, y, z: Math.sin(angle) * ringRadius };
-    });
+  function findAnswer(question) {
+    const text = normalize(question);
+    const projects = readProjects();
 
-    let sphereRadiusX = 0;
-    let sphereRadiusY = 0;
-    let rotationX = 0.35;
-    let rotationY = 0;
-    // Vitesses de rotation (radians par image) ; orbitSpeedFactor règle la vitesse globale du nuage
-    const orbitSpeedFactor = 0.8;
-    const baseSpeedX = 0.0008 * orbitSpeedFactor;
-    const baseSpeedY = 0.004 * orbitSpeedFactor;
-    let speedX = baseSpeedX;
-    let speedY = baseSpeedY;
-    let targetSpeedX = speedX;
-    let targetSpeedY = speedY;
-    let heroVisible = true;
-    let animationFrame = null;
-
-    function updateSphereRadius() {
-      const sectionRect = heroSection.getBoundingClientRect();
-      sphereRadiusY = Math.min(sectionRect.height * 0.42, 520);
-      let cardHalfWidth = 0;
-
-      // La sphère tourne autour de la carte, pas du centre de la section, sans sortir de l'écran par le haut
-      if (heroCard) {
-        const cardRect = heroCard.getBoundingClientRect();
-        const cardCenterY = cardRect.top + cardRect.height / 2 - sectionRect.top;
-        heroOrbit.style.setProperty("--orbit-center-y", `${cardCenterY.toFixed(0)}px`);
-        sphereRadiusY = Math.min(sphereRadiusY, cardCenterY * 0.82);
-        cardHalfWidth = cardRect.width / 2;
-      }
-
-      // Ellipsoïde plus large que haut : les mots débordent de chaque côté de la carte
-      sphereRadiusX = Math.min(sectionRect.width * 0.46, Math.max(sphereRadiusY, cardHalfWidth * 1.35), 680);
+    // Un projet précis est cité
+    const projectIndex = projectKeywords.findIndex((keys) => keys.some((key) => text.includes(key)));
+    if (projectIndex >= 0 && projects[projectIndex] && !text.includes("projets")) {
+      return projectAnswer(projects[projectIndex]);
     }
 
-    function renderOrbit() {
-      const cosX = Math.cos(rotationX);
-      const sinX = Math.sin(rotationX);
-      const cosY = Math.cos(rotationY);
-      const sinY = Math.sin(rotationY);
-      const perspective = 2.6;
+    if (text.includes("projet") || text.includes("realisation") || text.includes("portfolio")) {
+      return {
+        html: `<p>Voici mes ${projects.length} projets principaux :</p>
+               <ul>${projects.map((p) => `<li><strong>${escapeHtml(p.title)}</strong> (${escapeHtml(p.language)})</li>`).join("")}</ul>
+               <p>Demandez-moi le détail de l'un d'eux, par exemple « Parle-moi de Pac-Man ».</p>`,
+        actions: [{ label: "Voir tous les projets", href: "#projets" }]
+      };
+    }
 
-      orbitPoints.forEach((point) => {
-        const x1 = point.x * cosY + point.z * sinY;
-        const z1 = point.z * cosY - point.x * sinY;
-        const y1 = point.y * cosX - z1 * sinX;
-        const z2 = z1 * cosX + point.y * sinX;
+    const match = answers.find((entry) => entry.keys.some((key) => text.includes(key)));
+    if (match) return match.answer();
 
-        const depth = (z2 + 1) / 2;
-        const scale = perspective / (perspective - z2);
-        const screenX = x1 * sphereRadiusX * scale;
-        const screenY = y1 * sphereRadiusY * scale;
+    return {
+      html: `<p>Je n'ai pas de réponse toute prête à cette question : toutes mes réponses sont écrites à l'avance.
+             Le plus simple est de me la poser directement par e-mail, ou d'essayer un de ces sujets.</p>`,
+      actions: [
+        { label: "Qui es-tu ?", ask: "Qui es-tu ?" },
+        { label: "Tes projets", ask: "Montre-moi tes projets" },
+        { label: "Te contacter", ask: "Comment te contacter ?" }
+      ]
+    };
+  }
 
-        point.element.style.transform =
-          `translate(-50%, -50%) translate3d(${screenX.toFixed(1)}px, ${screenY.toFixed(1)}px, 0) scale(${(0.7 + depth * 0.5).toFixed(3)})`;
-        point.element.style.opacity = (0.18 + depth * 0.72).toFixed(2);
-        point.element.style.zIndex = String(Math.round(depth * 100));
+  function renderActions(actions) {
+    const box = document.createElement("div");
+    box.className = "message-actions";
+    actions.forEach((action) => {
+      let element;
+      if (action.href) {
+        element = document.createElement("a");
+        element.href = action.href;
+        if (action.external) {
+          element.target = "_blank";
+          element.rel = "noopener noreferrer";
+        }
+      } else {
+        element = document.createElement("button");
+        element.type = "button";
+        element.addEventListener("click", () => {
+          if (action.ask) askQuestion(action.ask);
+          if (action.cv && openCvButton) openCvButton.click();
+          if (action.project !== undefined) {
+            const tab = document.getElementById(`project-tab-${action.project + 1}`);
+            if (tab) tab.click();
+            document.getElementById("projets").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+          }
+        });
+      }
+      element.textContent = action.label;
+      box.appendChild(element);
+    });
+    return box;
+  }
+
+  function addMessage(role, html) {
+    const message = document.createElement("div");
+    message.className = `message message--${role}`;
+    if (role === "bot") {
+      message.innerHTML = `<span class="assistant-avatar" aria-hidden="true">EP</span><div class="message-body">${html}</div>`;
+    } else {
+      message.innerHTML = `<p>${html}</p>`;
+    }
+    assistantLog.appendChild(message);
+    assistantLog.scrollTop = assistantLog.scrollHeight;
+    return message;
+  }
+
+  let busy = false;
+
+  function askQuestion(question) {
+    const trimmed = question.trim();
+    if (!trimmed || busy) return;
+    busy = true;
+
+    assistant.classList.add("has-conversation");
+    assistantLog.hidden = false;
+    addMessage("user", escapeHtml(trimmed));
+
+    document.querySelectorAll(".assistant-history button").forEach((button) => {
+      button.classList.toggle("is-current", button.dataset.ask === trimmed);
+    });
+
+    // Petit temps de « réflexion » avant la réponse, supprimé si l'utilisateur préfère moins d'animations
+    const pending = addMessage("bot", '<span class="typing" aria-label="Eliot écrit"><span></span><span></span><span></span></span>');
+    const reply = findAnswer(trimmed);
+    setTimeout(() => {
+      const body = pending.querySelector(".message-body");
+      body.innerHTML = reply.html;
+      if (reply.actions && reply.actions.length) body.appendChild(renderActions(reply.actions));
+      assistantLog.scrollTop = assistantLog.scrollHeight;
+      busy = false;
+    }, reducedMotion ? 0 : 650);
+  }
+
+  if (assistant && assistantForm) {
+    assistantForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      askQuestion(assistantInput.value);
+      assistantInput.value = "";
+      assistantInput.style.height = "";
+    });
+
+    // Entrée envoie la question, Maj + Entrée passe à la ligne
+    assistantInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        assistantForm.requestSubmit();
+      }
+    });
+
+    // La zone de saisie s'agrandit avec le texte
+    assistantInput.addEventListener("input", () => {
+      assistantInput.style.height = "auto";
+      assistantInput.style.height = `${assistantInput.scrollHeight}px`;
+    });
+
+    document.querySelectorAll("[data-ask]").forEach((button) => {
+      button.addEventListener("click", () => askQuestion(button.dataset.ask));
+    });
+
+    document.querySelectorAll("[data-reset]").forEach((button) => {
+      button.addEventListener("click", () => {
+        assistantLog.innerHTML = "";
+        assistantLog.hidden = true;
+        assistant.classList.remove("has-conversation");
+        document.querySelectorAll(".assistant-history button").forEach((item) => item.classList.remove("is-current"));
+        assistantInput.focus();
       });
-    }
-
-    function animateOrbit() {
-      speedX += (targetSpeedX - speedX) * 0.04;
-      speedY += (targetSpeedY - speedY) * 0.04;
-      rotationX += speedX;
-      rotationY += speedY;
-      renderOrbit();
-      animationFrame = heroVisible ? requestAnimationFrame(animateOrbit) : null;
-    }
-
-    updateSphereRadius();
-    renderOrbit();
-
-    window.addEventListener("resize", () => {
-      updateSphereRadius();
-      renderOrbit();
     });
-
-    if (!reducedMotion) {
-      new IntersectionObserver(([entry]) => {
-        heroVisible = entry.isIntersecting;
-        if (heroVisible && !animationFrame) animationFrame = requestAnimationFrame(animateOrbit);
-      }).observe(heroSection);
-
-      if (finePointer) {
-        heroSection.addEventListener("pointermove", (event) => {
-          const rect = heroSection.getBoundingClientRect();
-          const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
-          const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
-
-          targetSpeedY = baseSpeedY + offsetX * 0.014 * orbitSpeedFactor;
-          targetSpeedX = baseSpeedX - offsetY * 0.008 * orbitSpeedFactor;
-
-          if (heroCard) {
-            heroCard.style.setProperty("--hero-ry", `${(offsetX * 6).toFixed(2)}deg`);
-            heroCard.style.setProperty("--hero-rx", `${(-offsetY * 6).toFixed(2)}deg`);
-          }
-        });
-
-        heroSection.addEventListener("pointerleave", () => {
-          targetSpeedX = baseSpeedX;
-          targetSpeedY = baseSpeedY;
-          if (heroCard) {
-            heroCard.style.setProperty("--hero-ry", "0deg");
-            heroCard.style.setProperty("--hero-rx", "0deg");
-          }
-        });
-      }
-    }
   }
 
   // Reflet orange qui suit la souris sur les cartes projets : la carte reste immobile pour viser facilement le logo GitHub
