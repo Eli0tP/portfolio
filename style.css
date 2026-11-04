@@ -704,6 +704,337 @@ button {
   color: var(--color-ink);
 }
 
+/* ===== Trois accueils au choix : assistant, terminal ou classique ===== */
+/* Les accueils non choisis restent masqués, même si leur règle définit un « display » */
+.assistant[hidden],
+.terminal[hidden],
+.classic-hero[hidden] {
+  display: none;
+}
+
+.mode-switch {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 120;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 24px rgba(28, 30, 33, 0.14);
+}
+
+.mode-switch button {
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.mode-switch button:hover {
+  color: var(--color-ink);
+}
+
+.mode-switch button[aria-pressed="true"] {
+  background-color: var(--color-ink);
+  color: var(--color-white);
+}
+
+.mode-switch button:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+/* ----- Mode terminal ----- */
+.terminal {
+  --t-bg: #0C0C0C;
+  --t-text: #D4D4D4;
+  --t-green: #4EF04E;
+  --t-red: #F25656;
+  --t-blue: #6E7BFF;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  height: 100vh;
+  height: 100dvh;
+  padding: 32px 24px 24px;
+  background-color: #1B1D22;
+  overflow: hidden;
+}
+
+.terminal-window {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1080px;
+  height: min(78vh, 720px);
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: var(--t-bg);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+  border: 1px solid #2E3138;
+}
+
+.terminal-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 14px;
+  background-color: #F2F2F2;
+  color: #222222;
+  font-size: 0.8rem;
+}
+
+.terminal-controls {
+  display: flex;
+  gap: 18px;
+  color: #555555;
+}
+
+.terminal-screen {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 18px 18px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--t-text);
+  cursor: text;
+}
+
+.terminal-output p,
+.terminal-output pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.terminal-output a {
+  color: var(--t-blue);
+  text-decoration: underline;
+}
+
+.t-prompt {
+  color: var(--t-text);
+}
+
+.t-ok {
+  color: var(--t-green);
+}
+
+.t-key {
+  color: var(--t-red);
+}
+
+.t-error {
+  color: var(--t-red);
+}
+
+.t-title {
+  color: var(--t-green);
+  font-weight: 700;
+}
+
+.terminal-fetch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 18px 36px;
+  margin: 14px 0 18px;
+}
+
+.terminal-banner {
+  color: var(--t-green);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  line-height: 1.05;
+  white-space: pre;
+  text-shadow: 3px 3px 0 #1F6B1F;
+}
+
+.terminal-info .t-host {
+  color: var(--t-red);
+}
+
+.terminal-info .t-rule {
+  color: var(--t-text);
+}
+
+.terminal-info dl div {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-info dt {
+  color: var(--t-red);
+}
+
+.terminal-info dt::after {
+  content: " ⇥";
+  color: var(--t-text);
+}
+
+.terminal-line {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.terminal-line input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: var(--t-text);
+  caret-color: var(--t-green);
+}
+
+.terminal-scroll {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #B9BEC8;
+}
+
+.terminal-scroll:hover {
+  color: var(--color-white);
+}
+
+/* ----- Mode classique ----- */
+.classic-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  padding: 80px 24px 32px;
+  background-color: var(--color-bg);
+  text-align: center;
+}
+
+.classic-hero-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+}
+
+.classic-name {
+  font-family: var(--font-title);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  margin-bottom: 18px;
+}
+
+.classic-subtitle {
+  max-width: 620px;
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: var(--color-text-muted);
+  margin-bottom: 30px;
+}
+
+.classic-subtitle strong {
+  color: var(--color-ink);
+}
+
+.classic-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn-secondary {
+  background-color: var(--color-card);
+  color: var(--color-ink);
+  border: 1px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-ink);
+  transform: translateY(-2px);
+}
+
+.classic-scroll {
+  margin-top: auto;
+}
+
+@media (max-width: 860px) {
+  .terminal {
+    padding: 16px 10px;
+  }
+
+  .terminal-window {
+    height: 80vh;
+  }
+
+  .terminal-screen {
+    font-size: 0.78rem;
+    padding: 10px 12px;
+  }
+
+  .terminal-banner {
+    font-size: 0.62rem;
+  }
+
+  .terminal-info dl div {
+    display: block;
+  }
+
+  .terminal-info dt,
+  .terminal-info dd {
+    display: inline;
+  }
+
+  .mode-switch {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 12px;
+  }
+}
+
+.terminal-output .t-pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.t-blue-dir {
+  color: var(--t-blue);
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+
+  /* Sur mobile, le sélecteur passe en haut et s'efface quand le menu apparaît */
+  .mode-switch {
+    top: 10px;
+    bottom: auto;
+    transition: opacity 0.3s ease;
+  }
+
+  body.is-scrolled .mode-switch {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .assistant-main,
+  .classic-hero {
+    padding-top: 70px;
+  }
+}
+
 .main-content-flow {
   position: relative;
   background-color: var(--color-bg);

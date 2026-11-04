@@ -130,6 +130,71 @@
       </div>
     </section>
 
+    <section id="hero-terminal" class="terminal" aria-label="Accueil en mode terminal" hidden>
+      <div class="terminal-window">
+        <div class="terminal-titlebar" aria-hidden="true">
+          <span class="terminal-title">visiteur@portfolio-eliot: ~</span>
+          <span class="terminal-controls"><span>—</span><span>□</span><span>×</span></span>
+        </div>
+        <div class="terminal-screen" id="terminal-screen">
+          <div class="terminal-output" id="terminal-output" aria-live="polite">
+            <p><span class="t-prompt">visiteur@portfolio-eliot:~$</span> ssh eliot@portfolio</p>
+            <p>Connexion établie. Tapez « aide » pour la liste des commandes.</p>
+            <div class="terminal-fetch">
+              <pre class="terminal-banner" aria-label="Eliot">███████╗██╗     ██╗ ██████╗ ████████╗
+██╔════╝██║     ██║██╔═══██╗╚══██╔══╝
+█████╗  ██║     ██║██║   ██║   ██║
+██╔══╝  ██║     ██║██║   ██║   ██║
+███████╗███████╗██║╚██████╔╝   ██║
+╚══════╝╚══════╝╚═╝ ╚═════╝    ╚═╝</pre>
+              <div class="terminal-info">
+                <p class="t-host">eliot@portfolio</p>
+                <p class="t-rule" aria-hidden="true">-----------------------</p>
+                <dl>
+                <div><dt>Poste</dt><dd>Développeur PHP/Symfony en alternance</dd></div>
+                <div><dt>Entreprise</dt><dd>WESCO, Cerizay</dd></div>
+                <div><dt>Formation</dt><dd>Bachelor IA, ECE Paris (2026 – 2027)</dd></div>
+                <div><dt>Région</dt><dd>Niort, Deux-Sèvres</dd></div>
+                <div><dt>Langues</dt><dd>Français, anglais (<span class="t-ok">B2</span>)</dd></div>
+                <div><dt>Technologies</dt><dd>PHP, Symfony, Java, Python, Docker, Kubernetes</dd></div>
+                <div><dt>Projets</dt><dd>7 (tapez « projets »)</dd></div>
+                <div><dt>Statut</dt><dd><span class="t-ok">en alternance depuis septembre 2026</span></dd></div>
+                </dl>
+              </div>
+            </div>
+          </div>
+          <form class="terminal-line" id="terminal-form" autocomplete="off">
+            <label for="terminal-input" class="t-prompt">visiteur@portfolio-eliot:~$</label>
+            <input id="terminal-input" type="text" spellcheck="false" autocapitalize="off"
+              aria-label="Commande du terminal">
+          </form>
+        </div>
+      </div>
+      <a href="#timeline-section" class="terminal-scroll">Ou parcourir le site classique ↓</a>
+    </section>
+
+    <section id="hero-classique" class="classic-hero" aria-label="Accueil classique" hidden>
+      <div class="container classic-hero-inner">
+        <p class="assistant-status"><span class="status-dot" aria-hidden="true"></span> En alternance chez WESCO depuis septembre 2026</p>
+        <h1 class="classic-name">Eliot Péchadre</h1>
+        <p class="classic-subtitle">
+          Développeur <strong>PHP/Symfony</strong> en alternance chez <strong>WESCO</strong>
+          et étudiant en Bachelor IA à l'<strong>ECE Paris</strong>.
+        </p>
+        <div class="classic-actions">
+          <a href="#projets" class="btn btn-primary">Voir mes projets</a>
+          <a href="#contact" class="btn btn-secondary">Me contacter</a>
+        </div>
+      </div>
+      <a href="#timeline-section" class="assistant-scroll classic-scroll">Voir mon parcours ↓</a>
+    </section>
+
+    <div class="mode-switch" role="group" aria-label="Choisir l'affichage de l'accueil">
+      <button type="button" data-mode="assistant" aria-pressed="true">Assistant</button>
+      <button type="button" data-mode="terminal" aria-pressed="false">Terminal</button>
+      <button type="button" data-mode="classique" aria-pressed="false">Classique</button>
+    </div>
+
     <div class="main-content-flow" id="main-content-flow">
 
       <section id="timeline-section" class="timeline-section" aria-labelledby="timeline-title">

@@ -140,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const isScrolled = window.scrollY > window.innerHeight * 0.5;
     if (siteNavigation) siteNavigation.classList.toggle("scrolled", isScrolled);
     if (socialDock) socialDock.classList.toggle("scrolled", isScrolled);
+    document.body.classList.toggle("is-scrolled", isScrolled);
 
     if (scrollProgress) {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -453,7 +454,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // La conversation garde son propre défilement tant qu'elle n'est pas arrivée au bout
   function conversationCanScroll(target, direction) {
-    const log = target.closest && target.closest(".assistant-log");
+    const log = target.closest && target.closest(".assistant-log, .terminal-screen");
     if (!log) return false;
     return direction > 0
       ? log.scrollTop + log.clientHeight < log.scrollHeight - 1
@@ -539,6 +540,227 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".assistant-history button").forEach((item) => item.classList.remove("is-current"));
         assistantInput.focus();
       });
+    });
+  }
+
+  // ===== Choix de l'accueil : assistant, terminal ou classique (mémorisé dans le navigateur) =====
+  const homeSections = {
+    assistant: document.getElementById("hero"),
+    terminal: document.getElementById("hero-terminal"),
+    classique: document.getElementById("hero-classique")
+  };
+  const modeButtons = document.querySelectorAll(".mode-switch [data-mode]");
+  const terminalInput = document.getElementById("terminal-input");
+
+  function setMode(mode, remember = true) {
+    if (!homeSections[mode]) mode = "assistant";
+    Object.entries(homeSections).forEach(([name, section]) => {
+      if (section) section.hidden = name !== mode;
+    });
+    modeButtons.forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+    });
+    document.body.dataset.mode = mode;
+    if (remember) {
+      try {
+        localStorage.setItem("accueil-mode", mode);
+      } catch (error) {
+        // Stockage indisponible : le choix vaut seulement pour cette visite
+      }
+    }
+    if (mode === "terminal" && terminalInput && window.scrollY < window.innerHeight / 2) {
+      terminalInput.focus({ preventScroll: true });
+    }
+  }
+
+  modeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      setMode(button.dataset.mode);
+      if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+    });
+  });
+
+  let savedMode = "assistant";
+  try {
+    savedMode = localStorage.getItem("accueil-mode") || "assistant";
+  } catch (error) {
+    savedMode = "assistant";
+  }
+  setMode(savedMode, false);
+
+  // ===== Mode terminal : commandes écrites à l'avance =====
+  const terminalForm = document.getElementById("terminal-form");
+  const terminalOutput = document.getElementById("terminal-output");
+  const terminalScreen = document.getElementById("terminal-screen");
+  const PROMPT = "visiteur@portfolio-eliot:~$";
+  const terminalHistory = [];
+  let historyIndex = 0;
+
+  function printLine(html, className = "") {
+    const line = document.createElement("div");
+    if (className) line.className = className;
+    line.innerHTML = html;
+    terminalOutput.appendChild(line);
+    terminalScreen.scrollTop = terminalScreen.scrollHeight;
+  }
+
+  function link(href, label) {
+    const external = href.startsWith("http") ? ' target="_blank" rel="noopener noreferrer"' : "";
+    return `<a href="${href}"${external}>${escapeHtml(label)}</a>`;
+  }
+
+  const commandHelp = [
+    ["qui", "qui suis-je"],
+    ["alternance", "mon poste chez WESCO"],
+    ["parcours", "mes études et expériences"],
+    ["projets", "la liste de mes projets"],
+    ["projet <numéro>", "le détail d'un projet, par exemple « projet 4 »"],
+    ["technologies", "ce que je sais utiliser"],
+    ["contact", "comment me joindre"],
+    ["cv", "ouvrir le résumé de mon CV"],
+    ["effacer", "vider l'écran"],
+    ["assistant, classique", "changer d'affichage"],
+    ["quitter", "fermer le terminal"]
+  ];
+
+  const commands = {
+    aide() {
+      printLine('<p class="t-title">Commandes disponibles</p>');
+      printLine(commandHelp.map(([name, text]) => `  <span class="t-ok">${escapeHtml(name.padEnd(22))}</span>${escapeHtml(text)}`).join("\n"), "t-pre");
+    },
+    qui() {
+      printLine(`Eliot Péchadre, développeur PHP/Symfony en alternance chez WESCO (Cerizay)
+et étudiant en Bachelor IA à l'ECE Paris.`, "t-pre");
+    },
+    alternance() {
+      printLine(`<span class="t-title">WESCO, service informatique, depuis septembre 2026</span>
+  - corrections de bugs et évolutions d'une application interne en PHP/Symfony
+  - mise en place de GitLab et GitHub pour le service, avec la documentation technique
+  - déploiement de postes macOS et installation du matériel logistique (Zebra)
+Rythme : 2 semaines à l'école, 3 semaines en entreprise.`, "t-pre");
+    },
+    parcours() {
+      printLine(`<span class="t-key">2021 – 2024</span>  Baccalauréat général, spécialités Mathématiques et NSI (Niort)
+<span class="t-key">2024 – 2026</span>  Bachelor Informatique, ECE Rennes
+<span class="t-key">2026</span>         Semestre d'échange à l'Université de Malte, en anglais
+<span class="t-key">2026 – 2027</span>  Bachelor IA, ECE Paris, en alternance chez WESCO`, "t-pre");
+    },
+    projets() {
+      const projects = readProjects();
+      printLine(projects.map((p, i) => `  <span class="t-ok">${String(i + 1).padStart(2)}</span>  ${escapeHtml(p.title)}  <span class="t-key">(${escapeHtml(p.language)})</span>`).join("\n")
+        + "\n\nTapez « projet 1 » à « projet " + projects.length + " » pour le détail.", "t-pre");
+    },
+    projet(argument) {
+      const projects = readProjects();
+      const number = parseInt(argument, 10);
+      const project = projects[number - 1];
+      if (!project) {
+        printLine(`Numéro inconnu. Choisissez entre 1 et ${projects.length} (tapez « projets »).`, "t-error");
+        return;
+      }
+      printLine(`<span class="t-title">${escapeHtml(project.title)}</span>  <span class="t-key">(${escapeHtml(project.language)})</span>
+${escapeHtml(project.description)}
+Code source : ${link(project.link, project.link.replace("https://", ""))}`, "t-pre");
+    },
+    technologies() {
+      printLine(`<span class="t-key">Web</span>              PHP/Symfony, JavaScript, HTML et CSS, Flask
+<span class="t-key">Langages</span>         Java, Python, SQL
+<span class="t-key">DevOps</span>           Docker, Kubernetes, Git, GitHub et GitLab, Linux
+<span class="t-key">Bases de données</span> PostgreSQL, MySQL, SQLite
+<span class="t-key">Autres</span>           réalité augmentée (A-Frame, MindAR), vision par ordinateur`, "t-pre");
+    },
+    contact() {
+      printLine(`<span class="t-key">E-mail</span>    ${link("mailto:eliot.pechadre@gmail.com", "eliot.pechadre@gmail.com")}
+<span class="t-key">LinkedIn</span>  ${link("https://www.linkedin.com/in/eliot-pechadre-28a961356/", "linkedin.com/in/eliot-pechadre")}
+<span class="t-key">GitHub</span>    ${link("https://github.com/Eli0tP", "github.com/Eli0tP")}`, "t-pre");
+    },
+    cv() {
+      printLine("Ouverture du résumé du CV…");
+      if (openCvButton) openCvButton.click();
+    },
+    effacer() {
+      terminalOutput.innerHTML = "";
+    },
+    assistant() {
+      setMode("assistant");
+    },
+    classique() {
+      setMode("classique");
+    },
+    terminal() {
+      printLine("Vous y êtes déjà.");
+    },
+    ls() {
+      printLine('<span class="t-blue-dir">parcours/</span>  <span class="t-blue-dir">projets/</span>  contact.txt  cv.txt', "t-pre");
+    },
+    quitter() {
+      printLine("logout\nConnection to portfolio closed.", "t-pre");
+      setTimeout(() => setMode("classique"), reducedMotion ? 0 : 900);
+    }
+  };
+
+  // Autres façons d'écrire les mêmes commandes
+  const aliases = {
+    help: "aide", "?": "aide", whoami: "qui", "qui-es-tu": "qui", presentation: "qui",
+    wesco: "alternance", travail: "alternance", etudes: "parcours", formation: "parcours",
+    competences: "technologies", stack: "technologies", "cat contact.txt": "contact",
+    "cat cv.txt": "cv", clear: "effacer", cls: "effacer", exit: "quitter", logout: "quitter",
+    chatbot: "assistant"
+  };
+
+  function runCommand(raw) {
+    const text = raw.trim();
+    printLine(`<span class="t-prompt">${PROMPT}</span> ${escapeHtml(text)}`);
+    if (!text) return;
+
+    const normalized = normalize(text).replace(/\s+/g, " ");
+    if (normalized.startsWith("sudo")) {
+      printLine("Permission refusée : seul Eliot a les droits d'administration ici.", "t-error");
+      return;
+    }
+    const [name, ...rest] = normalized.split(" ");
+    const key = aliases[normalized] || aliases[name] || name;
+    if (commands[key]) {
+      commands[key](rest.join(" "));
+    } else {
+      printLine(`commande introuvable : ${escapeHtml(text)}. Tapez « aide » pour la liste des commandes.`, "t-error");
+    }
+  }
+
+  if (terminalForm && terminalInput) {
+    terminalForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const value = terminalInput.value;
+      if (value.trim()) terminalHistory.push(value);
+      historyIndex = terminalHistory.length;
+      terminalInput.value = "";
+      runCommand(value);
+    });
+
+    terminalInput.addEventListener("keydown", (event) => {
+      // Flèches haut et bas : historique des commandes
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+        if (!terminalHistory.length) return;
+        historyIndex += event.key === "ArrowUp" ? -1 : 1;
+        historyIndex = Math.max(0, Math.min(terminalHistory.length, historyIndex));
+        terminalInput.value = terminalHistory[historyIndex] || "";
+      }
+      // Tabulation : complète le nom de la commande
+      if (event.key === "Tab") {
+        const start = normalize(terminalInput.value);
+        const match = Object.keys(commands).find((name) => name.startsWith(start) && start);
+        if (match) {
+          event.preventDefault();
+          terminalInput.value = match;
+        }
+      }
+    });
+
+    // Un clic dans le terminal place le curseur dans la ligne de commande
+    terminalScreen.addEventListener("click", (event) => {
+      if (event.target.closest("a") || window.getSelection().toString()) return;
+      terminalInput.focus({ preventScroll: true });
     });
   }
 
