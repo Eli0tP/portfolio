@@ -427,15 +427,83 @@ document.addEventListener("DOMContentLoaded", () => {
     }, reducedMotion ? 0 : 650);
   }
 
-  // Le voile de l'assistant fonce de 0 à 35 % pendant que le site classique le recouvre
-  function updateAssistantCover() {
-    if (!assistant) return;
-    const progress = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
-    assistant.style.setProperty("--assistant-cover", (progress * 0.35).toFixed(3));
+  // ===== Défilement strict : un cran vers le bas depuis l'assistant mène directement aux Expériences,
+  // un cran vers le haut depuis le début des Expériences ramène à l'assistant =====
+  const experienceSection = document.getElementById("timeline-section");
+  let snapping = false;
+
+  function experienceTop() {
+    return Math.round(experienceSection.getBoundingClientRect().top + window.scrollY);
   }
 
-  window.addEventListener("scroll", updateAssistantCover, { passive: true });
-  updateAssistantCover();
+  function snapTo(y) {
+    snapping = true;
+    window.scrollTo({ top: y, behavior: reducedMotion ? "auto" : "smooth" });
+    setTimeout(() => { snapping = false; }, reducedMotion ? 50 : 800);
+  }
+
+  // Renvoie la position cible si le geste doit être intercepté, sinon null
+  function snapTarget(direction) {
+    const y = window.scrollY;
+    const top = experienceTop();
+    if (direction > 0 && y < top - 2) return top;
+    if (direction < 0 && y > 0 && y <= top + 2) return 0;
+    return null;
+  }
+
+  // La conversation garde son propre défilement tant qu'elle n'est pas arrivée au bout
+  function conversationCanScroll(target, direction) {
+    const log = target.closest && target.closest(".assistant-log");
+    if (!log) return false;
+    return direction > 0
+      ? log.scrollTop + log.clientHeight < log.scrollHeight - 1
+      : log.scrollTop > 0;
+  }
+
+  function handleSnap(event, direction) {
+    if (snapping) {
+      event.preventDefault();
+      return;
+    }
+    if (conversationCanScroll(event.target, direction)) return;
+    const target = snapTarget(direction);
+    if (target === null) return;
+    event.preventDefault();
+    snapTo(target);
+  }
+
+  if (assistant && experienceSection) {
+    window.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaY) < 4) return;
+      handleSnap(event, Math.sign(event.deltaY));
+    }, { passive: false });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.target.closest("textarea, input, select")) return;
+      const keys = { ArrowDown: 1, PageDown: 1, " ": 1, ArrowUp: -1, PageUp: -1 };
+      if (event.key in keys) handleSnap(event, keys[event.key]);
+    });
+
+    let touchStartY = null;
+    window.addEventListener("touchstart", (event) => {
+      touchStartY = event.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener("touchmove", (event) => {
+      if (touchStartY === null) return;
+      const delta = touchStartY - event.touches[0].clientY;
+      if (Math.abs(delta) < 12) return;
+      handleSnap(event, Math.sign(delta));
+      if (event.defaultPrevented) touchStartY = null;
+    }, { passive: false });
+
+    // Les liens vers le Parcours arrivent exactement au même endroit que le défilement
+    document.querySelectorAll('a[href="#timeline-section"]').forEach((link) => {
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        snapTo(experienceTop());
+      });
+    });
+  }
 
   if (assistant && assistantForm) {
     assistantForm.addEventListener("submit", (event) => {
