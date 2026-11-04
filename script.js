@@ -135,10 +135,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const siteNavigation = document.querySelector(".site-nav-wrapper");
   const socialDock = document.querySelector(".social-dock");
   const scrollProgress = document.getElementById("scroll-progress");
-  const scrollThreshold = 70;
-
   function updateNavigationOnScroll() {
-    const isScrolled = window.scrollY > scrollThreshold;
+    // Le menu et la barre sociale apparaissent quand le site classique recouvre la moitié de l'assistant
+    const isScrolled = window.scrollY > window.innerHeight * 0.5;
     if (siteNavigation) siteNavigation.classList.toggle("scrolled", isScrolled);
     if (socialDock) socialDock.classList.toggle("scrolled", isScrolled);
 
@@ -427,6 +426,16 @@ document.addEventListener("DOMContentLoaded", () => {
       busy = false;
     }, reducedMotion ? 0 : 650);
   }
+
+  // Le voile de l'assistant fonce de 0 à 35 % pendant que le site classique le recouvre
+  function updateAssistantCover() {
+    if (!assistant) return;
+    const progress = Math.min(Math.max(window.scrollY / window.innerHeight, 0), 1);
+    assistant.style.setProperty("--assistant-cover", (progress * 0.35).toFixed(3));
+  }
+
+  window.addEventListener("scroll", updateAssistantCover, { passive: true });
+  updateAssistantCover();
 
   if (assistant && assistantForm) {
     assistantForm.addEventListener("submit", (event) => {
