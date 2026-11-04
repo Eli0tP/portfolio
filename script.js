@@ -136,8 +136,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const socialDock = document.querySelector(".social-dock");
   const scrollProgress = document.getElementById("scroll-progress");
   function updateNavigationOnScroll() {
-    // Le menu et la barre sociale apparaissent quand le site classique recouvre la moitié de l'assistant
-    const isScrolled = window.scrollY > window.innerHeight * 0.5;
+    // Mode classique : comme sur main, le menu apparaît dès 70 pixels ;
+    // autres modes : quand la moitié de l'accueil est passée
+    const threshold = document.body.dataset.mode === "classique" ? 70 : window.innerHeight * 0.5;
+    const isScrolled = window.scrollY > threshold;
     if (siteNavigation) siteNavigation.classList.toggle("scrolled", isScrolled);
     if (socialDock) socialDock.classList.toggle("scrolled", isScrolled);
     document.body.classList.toggle("is-scrolled", isScrolled);
@@ -462,6 +464,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function handleSnap(event, direction) {
+    // Le mode classique garde le défilement libre de main
+    if (document.body.dataset.mode === "classique") return;
     if (snapping) {
       event.preventDefault();
       return;
@@ -501,6 +505,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('a[href="#timeline-section"]').forEach((link) => {
       link.addEventListener("click", (event) => {
         event.preventDefault();
+        if (document.body.dataset.mode === "classique") {
+          // Comme sur main : on s'arrête quand le parcours recouvre l'accueil
+          const peek = parseFloat(getComputedStyle(document.body).getPropertyValue("--hero-peek")) || 0;
+          window.scrollTo({ top: peek, behavior: reducedMotion ? "auto" : "smooth" });
+          return;
+        }
         snapTo(experienceTop());
       });
     });
@@ -547,7 +557,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const homeSections = {
     assistant: document.getElementById("hero"),
     terminal: document.getElementById("hero-terminal"),
-    classique: document.getElementById("hero-classique")
+    classique: document.getElementById("hero-classique-conteneur")
   };
   const modeButtons = document.querySelectorAll(".mode-switch [data-mode]");
   const terminalInput = document.getElementById("terminal-input");
