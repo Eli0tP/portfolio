@@ -859,6 +859,19 @@ button {
   text-shadow: 3px 3px 0 #1F6B1F;
 }
 
+/* Nom de famille en bleu, plus petit que le prénom, comme le second mot de la bannière d'origine */
+.terminal-banners {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.terminal-banner--blue {
+  font-size: 0.62rem;
+  color: var(--t-blue);
+  text-shadow: 2px 2px 0 #2B3192;
+}
+
 .terminal-info .t-host {
   color: var(--t-red);
 }
@@ -986,6 +999,10 @@ button {
 
   .terminal-banner {
     font-size: 0.62rem;
+  }
+
+  .terminal-banner--blue {
+    font-size: 0.36rem;
   }
 
   .terminal-info dl div {
