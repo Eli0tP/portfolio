@@ -1,28 +1,30 @@
 :root {
-  --color-primary: #FF5E1E;
-  --color-primary-hover: #C93B00;
+  /* Palette de l'assistant, reprise sur tout le site :
+     gris clairs pour les fonds, noir pour le texte et les actions, blanc pour les cartes */
+  --color-primary: #1C1E21;
+  --color-primary-hover: #000000;
   /* Orange lisible pour les petits textes (contraste d'au moins 4,8:1) */
   --color-primary-text: #B83600;
-  --color-bg: #FDFBF7;
-  --color-bg-alt: #F0E8D8;
+  --color-bg: #F4F5F7;
+  --color-bg-alt: #E9EBF0;
   --color-card: #FFFFFF;
-  --color-accent-subtle: color-mix(in srgb, var(--color-primary) 8%, white);
-  --color-primary-subtle: color-mix(in srgb, var(--color-primary) 14%, white);
+  --color-accent-subtle: #F4F5F7;
+  --color-primary-subtle: #E9EBF0;
   --color-ink: #1C1E21;
   --color-white: #FFFFFF;
   --color-text: var(--color-ink);
-  --color-text-muted: #64707D;
-  --color-text-light: color-mix(in srgb, var(--color-text-muted) 65%, white);
-  --color-border: var(--color-bg-alt);
-  --color-border-hover: color-mix(in srgb, var(--color-primary) 22%, white);
+  --color-text-muted: #4F5863;
+  --color-text-light: #4F5863;
+  --color-border: #D9DCE3;
+  --color-border-hover: #B9BEC8;
 
   --font-title: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Fira Code', 'Courier New', monospace;
 
   --shadow-sm: 0 2px 8px rgba(28, 30, 33, 0.05);
-  --shadow-md: 0 8px 24px rgba(201, 59, 0, 0.10);
-  --shadow-hover: 0 14px 32px rgba(201, 59, 0, 0.16);
+  --shadow-md: 0 8px 24px rgba(28, 30, 33, 0.10);
+  --shadow-hover: 0 14px 32px rgba(28, 30, 33, 0.16);
   --shadow-card: 0 4px 20px rgba(28, 30, 33, 0.06);
 
   --radius-sm: 8px;
@@ -122,14 +124,14 @@ button {
   transform: translate(-50%, -50%);
   width: 40px;
   height: 40px;
-  background-color: var(--color-primary);
+  background-color: rgba(255, 255, 255, 0.16);
   border-radius: 50%;
   z-index: 0;
   transition: top 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
     opacity 0.25s ease;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.55),
+  box-shadow: 0 4px 14px rgba(28, 30, 33, 0.55),
     inset 0 -2px 6px rgba(0, 0, 0, 0.18);
 }
 
@@ -185,7 +187,7 @@ button {
   z-index: 90;
   background-color: color-mix(in srgb, var(--color-bg) 95%, transparent);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(235, 227, 215, 0.7);
+  border-bottom: 1px solid #D9DCE3;
   padding: 14px 0;
   opacity: 0;
   visibility: hidden;
@@ -287,11 +289,9 @@ button {
 }
 
 .assistant {
-  --assistant-bg: #F4F5F7;
-  --assistant-side: #E9EBF0;
-  --assistant-line: #D9DCE3;
-  /* Gris assez foncé pour rester lisible sur la barre latérale (contraste d'au moins 4,5:1) */
-  --color-text-muted: #4F5863;
+  --assistant-bg: var(--color-bg);
+  --assistant-side: var(--color-bg-alt);
+  --assistant-line: var(--color-border);
   display: grid;
   grid-template-columns: 270px 1fr;
   min-height: 100vh;
@@ -1299,13 +1299,13 @@ button {
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-white);
-  box-shadow: 0 4px 14px rgba(255, 94, 30, 0.35);
+  box-shadow: 0 4px 14px rgba(28, 30, 33, 0.35);
 }
 
 .btn-primary:hover {
   background-color: var(--color-primary-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(201, 59, 0, 0.45);
+  box-shadow: 0 6px 20px rgba(28, 30, 33, 0.45);
 }
 
 .btn-large {
