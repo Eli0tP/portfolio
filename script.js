@@ -561,6 +561,8 @@ document.addEventListener("DOMContentLoaded", () => {
       button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
     });
     document.body.dataset.mode = mode;
+    // Les éléments masqués ont une taille nulle : on recalcule les mises en page qui en dépendent
+    window.dispatchEvent(new Event("resize"));
     if (remember) {
       try {
         localStorage.setItem("accueil-mode", mode);
@@ -762,6 +764,152 @@ Code source : ${link(project.link, project.link.replace("https://", ""))}`, "t-p
       if (event.target.closest("a") || window.getSelection().toString()) return;
       terminalInput.focus({ preventScroll: true });
     });
+  }
+
+  // Sphère 3D des technologies derrière la carte du hero
+  const heroSection = document.getElementById("hero-classique");
+  const heroOrbit = document.getElementById("hero-orbit");
+  const heroCard = document.querySelector(".hero-card");
+  const orbitTechnologies = [
+    { label: "PHP", key: true }, { label: "Symfony", key: true }, { label: "Java", key: true },
+    { label: "Python", key: true }, { label: "Kubernetes", key: true }, { label: "Docker", key: true },
+    { label: "Spring Boot" }, { label: "Flask" }, { label: "JavaScript" }, { label: "SQL" },
+    { label: "PostgreSQL" }, { label: "MySQL" }, { label: "SQLite" }, { label: "Helm" },
+    { label: "Keycloak" }, { label: "Git" }, { label: "GitHub" }, { label: "Linux" },
+    { label: "macOS" }, { label: "Bash" }, { label: "HTML" }, { label: "CSS" },
+    { label: "A-Frame" }, { label: "MindAR" }, { label: "WebAR" }, { label: "POO" },
+    { label: "Agile" }, { label: "Vision par ordinateur" }, { label: "IA" }, { label: "Claude Code" },
+    { label: "Antigravity" }, { label: "CloudNativePG" }, { label: "KrakenD" }, { label: "OIDC" },
+    { label: "JWT" }, { label: "Minikube" }, { label: "Service Worker" }, { label: "Jinja" },
+    { label: "Tkinter" }, { label: "Swing" }, { label: "Jupyter" }, { label: "NoSQL" },
+    { label: "Bootstrap" }, { label: "WordPress" }, { label: "Haversine" }, { label: "Réalité augmentée" },
+    { label: "Documentation" }, { label: "Anglais B2" }, { label: "Zebra" }, { label: "API" },
+    { label: "PHP", key: true }, { label: "Symfony", key: true }, { label: "Java", key: true },
+    { label: "Python", key: true }, { label: "Kubernetes", key: true }, { label: "Git" },
+    { label: "Spring Boot" }, { label: "SQL" }, { label: "Docker" }, { label: "IA" }
+  ];
+
+  if (heroSection && heroOrbit) {
+    // Répartition régulière des mots sur la sphère (spirale de Fibonacci)
+    const orbitPoints = orbitTechnologies.map((technology, index) => {
+      const y = 1 - (2 * (index + 0.5)) / orbitTechnologies.length;
+      const ringRadius = Math.sqrt(1 - y * y);
+      const angle = index * Math.PI * (3 - Math.sqrt(5));
+
+      const word = document.createElement("li");
+      word.className = technology.key ? "orbit-word orbit-word--key" : "orbit-word";
+      word.textContent = technology.label;
+      heroOrbit.appendChild(word);
+
+      return { element: word, x: Math.cos(angle) * ringRadius, y, z: Math.sin(angle) * ringRadius };
+    });
+
+    let sphereRadiusX = 0;
+    let sphereRadiusY = 0;
+    let rotationX = 0.35;
+    let rotationY = 0;
+    // Vitesses de rotation (radians par image) ; orbitSpeedFactor règle la vitesse globale du nuage
+    const orbitSpeedFactor = 0.8;
+    const baseSpeedX = 0.0008 * orbitSpeedFactor;
+    const baseSpeedY = 0.004 * orbitSpeedFactor;
+    let speedX = baseSpeedX;
+    let speedY = baseSpeedY;
+    let targetSpeedX = speedX;
+    let targetSpeedY = speedY;
+    let heroVisible = true;
+    let animationFrame = null;
+
+    function updateSphereRadius() {
+      const sectionRect = heroSection.getBoundingClientRect();
+      sphereRadiusY = Math.min(sectionRect.height * 0.42, 520);
+      let cardHalfWidth = 0;
+
+      // La sphère tourne autour de la carte, pas du centre de la section, sans sortir de l'écran par le haut
+      if (heroCard) {
+        const cardRect = heroCard.getBoundingClientRect();
+        const cardCenterY = cardRect.top + cardRect.height / 2 - sectionRect.top;
+        heroOrbit.style.setProperty("--orbit-center-y", `${cardCenterY.toFixed(0)}px`);
+        sphereRadiusY = Math.min(sphereRadiusY, cardCenterY * 0.82);
+        cardHalfWidth = cardRect.width / 2;
+      }
+
+      // Ellipsoïde plus large que haut : les mots débordent de chaque côté de la carte
+      sphereRadiusX = Math.min(sectionRect.width * 0.46, Math.max(sphereRadiusY, cardHalfWidth * 1.35), 680);
+    }
+
+    function renderOrbit() {
+      const cosX = Math.cos(rotationX);
+      const sinX = Math.sin(rotationX);
+      const cosY = Math.cos(rotationY);
+      const sinY = Math.sin(rotationY);
+      const perspective = 2.6;
+
+      orbitPoints.forEach((point) => {
+        const x1 = point.x * cosY + point.z * sinY;
+        const z1 = point.z * cosY - point.x * sinY;
+        const y1 = point.y * cosX - z1 * sinX;
+        const z2 = z1 * cosX + point.y * sinX;
+
+        const depth = (z2 + 1) / 2;
+        const scale = perspective / (perspective - z2);
+        const screenX = x1 * sphereRadiusX * scale;
+        const screenY = y1 * sphereRadiusY * scale;
+
+        point.element.style.transform =
+          `translate(-50%, -50%) translate3d(${screenX.toFixed(1)}px, ${screenY.toFixed(1)}px, 0) scale(${(0.7 + depth * 0.5).toFixed(3)})`;
+        point.element.style.opacity = (0.18 + depth * 0.72).toFixed(2);
+        point.element.style.zIndex = String(Math.round(depth * 100));
+      });
+    }
+
+    function animateOrbit() {
+      speedX += (targetSpeedX - speedX) * 0.04;
+      speedY += (targetSpeedY - speedY) * 0.04;
+      rotationX += speedX;
+      rotationY += speedY;
+      renderOrbit();
+      animationFrame = heroVisible ? requestAnimationFrame(animateOrbit) : null;
+    }
+
+    updateSphereRadius();
+    renderOrbit();
+
+    window.addEventListener("resize", () => {
+      updateSphereRadius();
+      renderOrbit();
+    });
+
+    if (!reducedMotion) {
+      new IntersectionObserver(([entry]) => {
+        heroVisible = entry.isIntersecting;
+        if (heroVisible && !animationFrame) animationFrame = requestAnimationFrame(animateOrbit);
+      }).observe(heroSection);
+
+      if (finePointer) {
+        heroSection.addEventListener("pointermove", (event) => {
+          const rect = heroSection.getBoundingClientRect();
+          const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
+          const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+
+          targetSpeedY = baseSpeedY + offsetX * 0.014 * orbitSpeedFactor;
+          targetSpeedX = baseSpeedX - offsetY * 0.008 * orbitSpeedFactor;
+
+          if (heroCard) {
+            heroCard.style.setProperty("--hero-ry", `${(offsetX * 6).toFixed(2)}deg`);
+            heroCard.style.setProperty("--hero-rx", `${(-offsetY * 6).toFixed(2)}deg`);
+          }
+        });
+
+        heroSection.addEventListener("pointerleave", () => {
+          targetSpeedX = baseSpeedX;
+          targetSpeedY = baseSpeedY;
+          if (heroCard) {
+            heroCard.style.setProperty("--hero-ry", "0deg");
+            heroCard.style.setProperty("--hero-rx", "0deg");
+          }
+        });
+      }
+    }
   }
 
   // Reflet orange qui suit la souris sur les cartes projets : la carte reste immobile pour viser facilement le logo GitHub

@@ -182,20 +182,32 @@
       <a href="#timeline-section" class="terminal-scroll">Ou parcourir le site classique ↓</a>
     </section>
 
-    <section id="hero-classique" class="classic-hero" aria-label="Accueil classique" hidden>
-      <div class="container classic-hero-inner">
-        <p class="assistant-status"><span class="status-dot" aria-hidden="true"></span> En alternance chez WESCO depuis septembre 2026</p>
-        <h1 class="classic-name">Eliot Péchadre</h1>
-        <p class="classic-subtitle">
-          Développeur <strong>PHP/Symfony</strong> en alternance chez <strong>WESCO</strong>
-          et étudiant en Bachelor IA à l'<strong>ECE Paris</strong>.
-        </p>
-        <div class="classic-actions">
-          <a href="#projets" class="btn btn-primary">Voir mes projets</a>
-          <a href="#contact" class="btn btn-secondary">Me contacter</a>
+    <section id="hero-classique" class="hero-section" aria-label="Accueil classique" hidden>
+      <ul class="hero-orbit" id="hero-orbit" aria-hidden="true"></ul>
+      <div class="container hero-container">
+
+        <div class="status-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>En alternance chez WESCO depuis septembre 2026</span>
         </div>
+
+        <div class="hero-card">
+          <p class="hero-greeting">Bonjour, je suis</p>
+          <h1 class="hero-name">Eliot Péchadre</h1>
+          <p class="hero-subtitle">
+            <span class="highlight-tag">&lt; Développeur /&gt;</span>
+            Développeur PHP/Symfony en alternance chez <strong>WESCO</strong> • Bachelor IA à l'ECE Paris
+          </p>
+        </div>
+
+        <a href="#timeline-section" class="scroll-cue" aria-label="Faire défiler vers le parcours">
+          <span class="scroll-cue-text">Faire défiler pour explorer</span>
+          <span class="mouse-icon" aria-hidden="true">
+            <span class="mouse-wheel"></span>
+          </span>
+        </a>
+
       </div>
-      <a href="#timeline-section" class="assistant-scroll classic-scroll">Voir mon parcours ↓</a>
     </section>
 
     <div class="mode-switch" role="group" aria-label="Choisir l'affichage de l'accueil">
